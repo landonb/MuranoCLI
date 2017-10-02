@@ -67,6 +67,7 @@ Or set your password with `murano password set <username>`.
         error("#{prologue} #{LOGIN_NOTICE}")
         warned_once = true
         username = ask('User name: ')
+        # FIXME/2017-09-29: Shouldn't we save to project files, too?...
         $cfg.set('user.name', username, :user)
         $project.refresh_user_name
         MrMurano::Verbose.whirly_unpause
