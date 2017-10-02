@@ -42,7 +42,7 @@ module MrMurano
     end
 
     def endpoint(path)
-      URI('https://' + host + '/api:1/' + path.to_s)
+      URI($cfg['net.protocol'] + '://' + host + '/api:1/' + path.to_s)
     end
 
     # ---------------------------------------------------------------------
