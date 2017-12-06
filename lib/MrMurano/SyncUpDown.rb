@@ -167,7 +167,8 @@ module MrMurano
         #   MAYBE/2017-07-18: Permanently disable Style/RedundantSelf?
         self.to_h <=> other.to_h
       end
-    end # MrMurano::SyncUpDown::Item
+    end
+    # MrMurano::SyncUpDown::Item
 
     #######################################################################
     # Methods that must be overridden
