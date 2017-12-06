@@ -114,7 +114,7 @@ module HashInit
       if respond_to? key
         send("#{key}=", val)
       elsif defined?(@show_errors) && @show_errors
-        $stderr.puts %(HashInit: missing hash key "#{key}")
+        warn %(HashInit: missing hash key "#{key}")
       end
     end
   end

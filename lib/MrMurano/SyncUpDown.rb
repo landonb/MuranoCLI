@@ -362,7 +362,7 @@ module MrMurano
         #)
         unless OS.windows?
           msg = 'Unexpected: touch failed on non-Windows machine'
-          $stderr.puts("#{msg} / host_os: #{RbConfig::CONFIG['host_os']} / err: #{err}")
+          warn "#{msg} / host_os: #{RbConfig::CONFIG['host_os']} / err: #{err}"
         end
 
         # 2017-07-13: Nor does ctime work.

@@ -42,7 +42,7 @@ module MrMurano
       #@syncset.each do |a|
       #  if a.name == name.to_s
       #    msg = %{WARNING: SyncRoot.add called more than once for name "#{a.name}"}
-      #    $stderr.puts HighLine.color(msg, :yellow)
+      #    warn HighLine.color(msg, :yellow)
       #  end
       #end
       # We should at least enforce a unique type policy,
