@@ -299,7 +299,7 @@ if RUBY_VERSION == '2.0.0'
               s.post_connection_check(@address)
             end
             @ssl_session = s.session
-          rescue => exception
+          rescue StandardError => exception
             D "Conn close because of connect error #{exception}"
             @socket.close if @socket && !@socket.closed?
             raise exception
