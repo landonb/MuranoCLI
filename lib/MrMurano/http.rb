@@ -117,7 +117,7 @@ module MrMurano
     # 2017-08-20: isJSON and showHttpError are grandparented into lint exceptions.
     def isJSON(data)
       [true, JSON.parse(data, json_opts)]
-    rescue
+    rescue StandardError
       [false, data]
     end
 
@@ -175,7 +175,7 @@ module MrMurano
       return {} if response.body.nil?
       begin
         JSON.parse(response.body, json_opts)
-      rescue
+      rescue StandardError
         response.body
       end
     end
