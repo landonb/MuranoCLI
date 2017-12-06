@@ -227,10 +227,10 @@ RSpec.describe 'murano init', :cmd do
         # It will ask to create an application and product.
         # MAGIC_NUMBER: !!!! the 8 is hardcoded indention here !!!!
         #   (removes the leading whitespace from the <<-EOT heredoc)
-        data = <<-EOT.gsub(/^ {8}/, '')
+        data = <<-DATA.gsub(/^ {8}/, '')
         #{@applctn_name}
         #{@product_name}
-        EOT
+        DATA
         # 2017-07-05: [lb] added line numbers to use debugger to help maintain this test.
         out, err, status = Open3.capture3(capcmd('murano', 'init'), stdin_data: data)
         expecting = expected_response_when_ids_found_in_config(
