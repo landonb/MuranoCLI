@@ -14,6 +14,7 @@ require 'os'
 require 'pathname'
 #require 'shellwords'
 require 'tempfile'
+require 'time'
 require 'MrMurano/progress'
 require 'MrMurano/verbosing'
 require 'MrMurano/hash'
@@ -351,7 +352,7 @@ module MrMurano
       return unless item[:updated_at]
 
       mod_time = item[:updated_at]
-      mod_time = DateTime.parse(mod_time).to_time unless mod_time.is_a?(Time)
+      mod_time = Time.parse(mod_time) unless mod_time.is_a?(Time)
       begin
         FileUtils.touch([local.to_path], mtime: mod_time)
       rescue Errno::EACCES => err

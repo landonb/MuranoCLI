@@ -5,7 +5,7 @@
 # vim:tw=0:ts=2:sw=2:et:ai
 # Unauthorized copying of this file is strictly prohibited.
 
-require 'date'
+require 'time'
 require 'MrMurano/ReCommander'
 require 'MrMurano/Solution-ServiceConfig'
 require 'MrMurano/SubCmdGroupContext'
@@ -42,8 +42,7 @@ module MrMurano
         if str =~ /^\d+(u|ms|s)?$/
           str
         else
-          dt = DateTime.parse(str)
-          (dt.to_time.to_f * 1_000_000).to_i
+          (Time.parse(str).to_f * 1_000_000).to_i
         end
       end
     end

@@ -7,10 +7,10 @@
 
 require 'abbrev'
 require 'cgi'
-require 'date'
 require 'digest/sha1'
 require 'json'
 require 'net/http'
+require 'time'
 require 'uri'
 require 'yaml'
 require 'MrMurano/progress'
@@ -144,7 +144,7 @@ module MrMurano
           item_a[:updated_at] = item_a[:local_path].mtime.getutc
         end
       elsif item_a[:updated_at].is_a?(String)
-        item_a[:updated_at] = DateTime.parse(item_a[:updated_at]).to_time.getutc
+        item_a[:updated_at] = Time.parse(item_a[:updated_at]).utc
       end
       if item_b[:updated_at].nil? && item_b[:local_path]
         ct = cached_update_time_for(item_b[:local_path])
@@ -153,7 +153,7 @@ module MrMurano
           item_b[:updated_at] = item_b[:local_path].mtime.getutc
         end
       elsif item_b[:updated_at].is_a?(String)
-        item_b[:updated_at] = DateTime.parse(item_b[:updated_at]).to_time.getutc
+        item_b[:updated_at] = Time.parse(item_b[:updated_at]).utc
       end
       return false if item_a[:updated_at].nil? && item_b[:updated_at].nil?
       return true if item_a[:updated_at].nil? && !item_b[:updated_at].nil?
@@ -182,14 +182,14 @@ module MrMurano
 
     def cache_update_time_for(local_path, time=nil)
       if time.nil?
-        time = Time.now.getutc
+        time = Time.now.utc
       elsif time.is_a?(String)
-        time = DateTime.parse(time)
+        time = Time.parse(time)
       end
       file_hash = local_path_file_hash(local_path)
       entry = {
         sha1: file_hash,
-        updated_at: time.to_datetime.iso8601(3),
+        updated_at: time.iso8601(3),
       }
       cache_file = $cfg.file_at(cache_file_name)
       if cache_file.file?
@@ -225,7 +225,7 @@ module MrMurano
           debug(" cm: #{cksm}")
           if entry.is_a?(Hash)
             if entry[:sha1] == cksm && entry.key?(:updated_at)
-              ret = DateTime.parse(entry[:updated_at])
+              ret = Time.parse(entry[:updated_at])
             end
           end
         end

@@ -6,9 +6,9 @@
 # Unauthorized copying of this file is strictly prohibited.
 
 require 'certified' if Gem.win_platform?
-require 'date'
 require 'json'
 require 'net/http'
+require 'time'
 require 'uri'
 # 2017-06-07: [lb] getting "execution expired (Net::OpenTimeout)" on http.start.
 # Suggestions online say to load the pure-Ruby DNS implementation, resolv.rb.
