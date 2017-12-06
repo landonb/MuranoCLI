@@ -43,7 +43,7 @@ module MrMurano
       end
 
       ##
-      # This gets all data about all endpoints
+      # This gets all data about all endpoints.
       def list
         ret = get
         return [] unless ret.is_a?(Array)

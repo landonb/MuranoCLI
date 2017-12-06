@@ -791,8 +791,10 @@ module MrMurano
     #
     # WARNING: This will download the remote item to do the diff.
     #
-    # @param merged [merged] The merged item to get a diff of
-    # @local local, unadulterated (non-merged) item
+    # @param merged [Hash] The merged item to get a diff of
+    # @param local [MrMurano::Webservice::Endpoint::RouteItem] Raw local item
+    # @param there [MrMurano::Webservice::Endpoint::RouteItem] Raw remote item
+    # @param asdown [Boolean] Direction/prespective of diff
     # @return [String] The diff output
     def dodiff(merged, local, _there=nil, asdown=false)
       trmt = Tempfile.new([tolocalname(merged, @itemkey) + '_remote_', '.lua'])
@@ -836,9 +838,10 @@ module MrMurano
 
         stdout_and_stderr, _status = Open3.capture2e(*cmd)
         # How important are the first two lines of the diff? E.g.,
-        #     --- /tmp/raw_data_remote_20170718-20183-gdyeg9.lua	2017-07-18 13:13:13.864051905 -0500
-        #     +++ /tmp/raw_data_local_20170718-20183-71o4me.lua	2017-07-18 13:13:14.520049397 -0500
-        # Seems like printing the path to a since-deleted temporary file is misleading.
+        #     --- /tmp/raw_data_remote_20170718-20183-gdyeg9.lua	2017-07-18 ...
+        #     +++ /tmp/raw_data_local_20170718-20183-71o4me.lua	2017-07-18 ...
+        # Seems like printing the path to a since-deleted temporary file is
+        # misleading, so cull these lines.
         if $cfg['diff.cmd'] == 'diff' || $cfg['diff.cmd'].start_with?('diff ')
           lineno = 0
           consise = stdout_and_stderr.lines.reject do |line|
@@ -1065,6 +1068,7 @@ module MrMurano
           unchg << mrg
         end
       end
+
       [sort_by_name(tomod), sort_by_name(unchg)]
     end
 
