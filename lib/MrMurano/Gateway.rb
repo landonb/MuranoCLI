@@ -397,7 +397,7 @@ module MrMurano
             props[:auth][:expire] = Integer(opts[:expire])
           rescue ArgumentError
             # Callers should prevent this, so ugly raise is okay.
-            raise ':expire option is not a valid number: #{fancy_ticks(opts[:expire])}'
+            raise ":expire option is not a valid number: #{fancy_ticks(opts[:expire])}"
           end
         end
         unless opts[:type].nil?
