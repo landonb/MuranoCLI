@@ -198,6 +198,10 @@ module MrMurano
       # :nocov:
     end
 
+    def remove_lite(itemkey, _thereitem, _modify=false)
+      remove(itemkey)
+    end
+
     ## Upload local item to remote
     #
     # Children objects Must override this
@@ -693,7 +697,7 @@ module MrMurano
       itemkey = @itemkey.to_sym
       todel.each do |item|
         syncup_item(item, options, :delete, 'Removing') do |aitem|
-          remove(aitem[itemkey])
+          remove_lite(aitem[itemkey], aitem.reject { |k, _v| k == :local_path }, true)
           num_synced += 1
         end
       end
@@ -886,7 +890,9 @@ module MrMurano
             if pattern.to_s[0] == '#'
               match(item, pattern)
             elsif !defined?(item.local_path) || item.local_path.nil?
-              false
+              into = location
+              lpath = tolocalpath(into, item)
+              lpath.to_s.include? pattern
             else
               item[:local_path].fnmatch(pattern)
             end
