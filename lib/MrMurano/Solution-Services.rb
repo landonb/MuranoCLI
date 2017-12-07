@@ -83,7 +83,6 @@ module MrMurano
 
       script = config_vars_decode(script)
 
-      localpath = Pathname.new(localpath) unless localpath.is_a?(Pathname)
       name = mkname(thereitem)
       pst = thereitem.to_h.merge(
         #solution_id: $cfg[@solntype],

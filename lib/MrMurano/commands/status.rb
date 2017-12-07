@@ -125,6 +125,7 @@ Endpoints can be selected with a "#<method>#<path glob>" pattern.
       )
       ret[:toadd].each do |item|
         interject " + #{item[:pp_type]}  #{highlight_chg(fmtr(item, options))}"
+        pretty_diff(item, options)
       end
 
       pretty_group_header(
@@ -132,6 +133,7 @@ Endpoints can be selected with a "#<method>#<path glob>" pattern.
       )
       ret[:todel].each do |item|
         interject " - #{item[:pp_type]}  #{highlight_del(fmtr(item, options))}"
+        pretty_diff(item, options)
       end
 
       pretty_group_header(
@@ -173,6 +175,11 @@ Endpoints can be selected with a "#<method>#<path glob>" pattern.
       else
         interject "Nothing #{header_empty}"
       end
+    end
+
+    def pretty_diff(item, options)
+      return unless options.diff && $cfg['tool.verbose'] && !item[:diff].empty?
+      interject item[:diff]
     end
 
     def highlight_chg(msg)
