@@ -310,9 +310,8 @@ module MrMurano
       #end
       id = item[@itemkey.to_sym]
       if id.to_s.empty?
-        # 2017-09-05: MRMUR-156: User seeing this.
         if @itemkey.to_sym != :id
-          debug "!!! Missing '#{@itemkey}', trying :id instead"
+          debug "Missing '#{@itemkey}', trying :id instead"
           id = item[:id]
         end
         if id.to_s.empty?
