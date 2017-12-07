@@ -303,7 +303,7 @@ module MrMurano
     #
     # @param local [Pathname] Full path of where to download to
     # @param item [Item] The item to download
-    def download(local, item, options={})
+    def download(local, item, options: {}, is_tmp: false)
       #if item[:bundled]
       #  warning "Not downloading into bundled item #{synckey(item)}"
       #  return
@@ -323,10 +323,12 @@ module MrMurano
         end
         debug ":id => #{id}"
       end
-
-      relpath = local.relative_path_from(Pathname.pwd).to_s
-      return unless download_item_allowed(relpath)
-
+      unless is_tmp
+        relpath = local.relative_path_from(Pathname.pwd).to_s
+        return unless download_item_allowed(relpath)
+      end
+      # MAYBE: If is_tmp and doing syncdown, just use this file rather
+      # than downloading again.
       local.dirname.mkpath
       local.open('wb') do |io|
         fetch(id) do |chunk|
@@ -336,8 +338,8 @@ module MrMurano
       update_mtime(local, item)
     end
 
-    def diff_download(tmp_path, merged)
-      download(tmp_path, merged)
+    def diff_download(tmp_path, merged, options)
+      download(tmp_path, merged, options: options, is_tmp: true)
     end
 
     ## Give the local file the same timestamp as the remote, because diff.
@@ -760,13 +762,13 @@ module MrMurano
       end
       toadd.each do |item|
         syncdown_item(item, into, options, :create, 'Adding') do |dest, aitem|
-          download(dest, aitem, options)
+          download(dest, aitem, options: options)
           num_synced += 1
         end
       end
       tomod.each do |item|
         syncdown_item(item, into, options, :update, 'Updating') do |dest, aitem|
-          download(dest, aitem, options)
+          download(dest, aitem, options: options)
           num_synced += 1
         end
       end
@@ -796,10 +798,13 @@ module MrMurano
     # @param there [MrMurano::Webservice::Endpoint::RouteItem] Raw remote item
     # @param asdown [Boolean] Direction/prespective of diff
     # @return [String] The diff output
-    def dodiff(merged, local, _there=nil, asdown=false)
+    def dodiff(merged, local, _there=nil, options={})
       trmt = Tempfile.new([tolocalname(merged, @itemkey) + '_remote_', '.lua'])
       tlcl = Tempfile.new([tolocalname(merged, @itemkey) + '_local_', '.lua'])
       Pathname.new(tlcl.path).open('wb') do |io|
+        # Copy the local file to a temp file, for the diff command.
+        # And for resources, remove the local-only :selected key, as
+        # it's not part of the remote item that gets downloaded next.
         if merged.key?(:script)
           io << config_vars_decode(merged[:script])
         else
@@ -811,10 +816,11 @@ module MrMurano
           diff_item_write(io, merged, local, nil)
         end
       end
+
       stdout_and_stderr = ''
       begin
         tmp_path = Pathname.new(trmt.path)
-        diff_download(tmp_path, merged)
+        diff_download(tmp_path, merged, options)
 
         MrMurano::Verbose.whirly_stop
 
@@ -828,7 +834,7 @@ module MrMurano
         local_path = tlcl.path.gsub(
           ::File::SEPARATOR, ::File::ALT_SEPARATOR || ::File::SEPARATOR
         )
-        if asdown
+        if options[:asdown]
           cmd << local_path
           cmd << remote_path
         else
