@@ -6,6 +6,7 @@
 # Unauthorized copying of this file is strictly prohibited.
 
 require 'erb'
+require 'pathname'
 require 'tempfile'
 require 'MrMurano/version'
 require 'MrMurano/Config'

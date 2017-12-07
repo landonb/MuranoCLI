@@ -66,7 +66,7 @@ unless ARGV.include? '--skip-plugins'
         require plugin.to_s
       #rescue Exception => err
       rescue StandardError => err
-        $stderr.puts "Failed to load plugin at #{plugin} because #{err}"
+        warn "Failed to load plugin at #{plugin} because #{err}"
       end
     end
   end

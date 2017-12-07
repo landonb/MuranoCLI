@@ -49,7 +49,7 @@ module MrMurano
       @scid = scid_for_name(@service_name)
     end
 
-    def create(pid, name=nil, &block) #? script_key?
+    def create(pid, name=nil, &block)
       name = pid if name.to_s.empty?
       raise 'Missing name/script_key?' if name.to_s.empty?
       # See pegasus_registry PostServiceConfig for the POST properties.

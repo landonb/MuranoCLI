@@ -8,7 +8,6 @@
 require 'fileutils'
 require 'json'
 require 'open3'
-require 'pathname'
 require 'vine'
 require 'cmd_common'
 

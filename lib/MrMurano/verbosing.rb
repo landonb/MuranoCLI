@@ -41,7 +41,7 @@ module MrMurano
     end
 
     def self.warning(msg)
-      whirly_interject { $stderr.puts(HighLine.color(msg, :yellow)) }
+      whirly_interject { warn(HighLine.color(msg, :yellow)) }
     end
 
     def error(msg)
@@ -50,7 +50,7 @@ module MrMurano
 
     def self.error(msg)
       # See also Commander::say_error
-      whirly_interject { $stderr.puts(HighLine.color(msg, :red)) }
+      whirly_interject { warn(HighLine.color(msg, :red)) }
     end
 
     ## Output tabular data

@@ -64,7 +64,7 @@ Get the logs for a solution.
                       create_additions: false,
                     )
                     puts MrMurano::Pretties.makePretty(js, options)
-                  rescue
+                  rescue StandardError
                     sol.error '=== JSON parse error, showing raw instead ==='
                     puts m
                   end

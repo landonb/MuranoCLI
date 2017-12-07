@@ -9,7 +9,6 @@ require 'fileutils'
 require 'json'
 require 'open3'
 require 'os'
-require 'pathname'
 require 'rbconfig'
 
 require 'cmd_common'

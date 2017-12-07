@@ -6,6 +6,7 @@
 # Unauthorized copying of this file is strictly prohibited.
 
 require 'fileutils'
+require 'pathname'
 require 'MrMurano/version'
 require 'MrMurano/Gateway'
 require 'MrMurano/ProjectFile'

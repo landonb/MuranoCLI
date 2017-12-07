@@ -417,7 +417,7 @@ module MrMurano
         else
           # *.blah query
           path.data.each do |ini|
-            path.data[ini].keys.each do |skey|
+            path.data[ini].each_key do |skey|
               next unless ikey == '*' || skey == ikey
               kvid = "#{ini}.#{skey}"
               next if seen[kvid]

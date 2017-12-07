@@ -7,6 +7,7 @@
 
 #require 'erb'
 require 'highline/import'
+require 'pathname'
 #require 'tempfile'
 require 'MrMurano/version'
 require 'MrMurano/Config-Migrate'

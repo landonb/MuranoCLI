@@ -75,7 +75,7 @@ module MrMurano
           gb = Object.const_get("MrMurano::#{maybe}::Settings")
           result[maybe] = gb.instance_methods(false).reject { |i| i.to_s[-1] == '=' }
         # rubocop:disable Lint/HandleExceptions: Do not suppress exceptions."
-        rescue
+        rescue StandardError
           # EXPLAIN/2017-08-20: When/Why does this happen?
         end
       end

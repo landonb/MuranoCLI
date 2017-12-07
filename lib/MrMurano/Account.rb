@@ -5,10 +5,8 @@
 # vim:tw=0:ts=2:sw=2:et:ai
 # Unauthorized copying of this file is strictly prohibited.
 
-require 'date'
 require 'json'
 require 'net/http'
-require 'pathname'
 require 'uri'
 require 'yaml'
 require 'MrMurano/hash'

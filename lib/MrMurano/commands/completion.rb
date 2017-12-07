@@ -77,7 +77,7 @@ class ::Commander::Runner
   # Get maximum depth of sub-commands.
   def cmdMaxDepth
     depth = 0
-    @commands.sort.each do |name, _cmd|
+    @commands.keys.sort.each do |name|
       levels = name.split
       depth = levels.count if levels.count > depth
     end
@@ -151,7 +151,7 @@ or
 #      end
 
     elsif options.subs
-      runner.instance_variable_get(:@commands).sort.each do |name, _cmd|
+      runner.instance_variable_get(:@commands).keys.sort.each do |name|
         #desc = _cmd.instance_variable_get(:@summary) #.lines[0]
         #say "#{name}:'#{desc}'"
         say name.to_s

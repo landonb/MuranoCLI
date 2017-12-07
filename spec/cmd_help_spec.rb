@@ -7,7 +7,6 @@
 
 require 'fileutils'
 require 'open3'
-require 'pathname'
 
 require 'highline/import'
 
