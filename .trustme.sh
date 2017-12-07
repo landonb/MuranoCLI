@@ -1,5 +1,4 @@
 #!/bin/bash
-# Last Modified: 2017.09.20
 # vim:tw=0:ts=2:sw=2:et:norl:spell
 
 # WHAT: A Continuous Integration (CI) script for kicking the build
