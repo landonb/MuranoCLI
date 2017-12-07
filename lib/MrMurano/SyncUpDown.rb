@@ -76,6 +76,7 @@ module MrMurano
         "@#{key}"
       end
       private :as_inst
+
       def as_sym(key)
         return key.to_sym if key.to_s[0] != '@'
         key.to_s[1..-1].to_sym
@@ -318,7 +319,7 @@ module MrMurano
           debug %(Remote item "#{item[:name]}" missing :id / local: #{local} / item: #{item})
           return if options[:ignore_errors]
           error %(Remote item missing :id => #{local})
-          print %(You can ignore this error using --ignore-errors)
+          say %(You can ignore this error using --ignore-errors)
           exit 1
         end
         debug ":id => #{id}"
