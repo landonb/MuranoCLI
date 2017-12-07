@@ -1,9 +1,9 @@
-# Last Modified: 2017.09.12 /coding: utf-8
+# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
-# Copyright © 2016-2017 Exosite LLC.
-# License: MIT. See LICENSE.txt.
-#  vim:tw=0:ts=2:sw=2:et:ai
+# vim:tw=0:ts=2:sw=2:et:ai
+# Unauthorized copying of this file is strictly prohibited.
 
 require 'highline'
 # Set HighLine's $terminal global.
@@ -23,9 +23,9 @@ require 'MrMurano/Config'
 $exited_abnormally = false
 at_exit do
   if $exited_abnormally
-    STDERR.puts('¡!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    STDERR.puts('¡Unexpected spec exit killed rspec!')
-    STDERR.puts('¡!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    warn('¡!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    warn('¡Unexpected spec exit killed rspec!')
+    warn('¡!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
   end
 end
 alias original_at_exit at_exit unless defined?(original_at_exit)
@@ -112,7 +112,7 @@ RSpec.shared_context 'CI_CMD' do
       #  RbConfig::CONFIG['host_os'] =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
       #)
       unless OS.windows?
-        $stderr.puts(
+        warn(
           'Unexpected: ln_s failed on non-Windows machine / ' \
           "host_os: #{RbConfig::CONFIG['host_os']} / err: #{err}"
         )

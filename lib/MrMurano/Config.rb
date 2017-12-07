@@ -1,9 +1,9 @@
-# Last Modified: 2017.09.29 /coding: utf-8
+# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
-# Copyright © 2016-2017 Exosite LLC.
-# License: MIT. See LICENSE.txt.
-#  vim:tw=0:ts=2:sw=2:et:ai
+# vim:tw=0:ts=2:sw=2:et:ai
+# Unauthorized copying of this file is strictly prohibited.
 
 require 'highline'
 require 'inifile'
@@ -417,7 +417,7 @@ module MrMurano
         else
           # *.blah query
           path.data.each do |ini|
-            path.data[ini].keys.each do |skey|
+            path.data[ini].each_key do |skey|
               next unless ikey == '*' || skey == ikey
               kvid = "#{ini}.#{skey}"
               next if seen[kvid]

@@ -1,14 +1,14 @@
-# Last Modified: 2017.09.29 /coding: utf-8
+# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
-# Copyright © 2016-2017 Exosite LLC.
-# License: MIT. See LICENSE.txt.
-#  vim:tw=0:ts=2:sw=2:et:ai
+# vim:tw=0:ts=2:sw=2:et:ai
+# Unauthorized copying of this file is strictly prohibited.
 
 require 'certified' if Gem.win_platform?
-require 'date'
 require 'json'
 require 'net/http'
+require 'time'
 require 'uri'
 # 2017-06-07: [lb] getting "execution expired (Net::OpenTimeout)" on http.start.
 # Suggestions online say to load the pure-Ruby DNS implementation, resolv.rb.
@@ -117,7 +117,7 @@ module MrMurano
     # 2017-08-20: isJSON and showHttpError are grandparented into lint exceptions.
     def isJSON(data)
       [true, JSON.parse(data, json_opts)]
-    rescue
+    rescue StandardError
       [false, data]
     end
 
@@ -175,7 +175,7 @@ module MrMurano
       return {} if response.body.nil?
       begin
         JSON.parse(response.body, json_opts)
-      rescue
+      rescue StandardError
         response.body
       end
     end
@@ -299,7 +299,7 @@ if RUBY_VERSION == '2.0.0'
               s.post_connection_check(@address)
             end
             @ssl_session = s.session
-          rescue => exception
+          rescue StandardError => exception
             D "Conn close because of connect error #{exception}"
             @socket.close if @socket && !@socket.closed?
             raise exception

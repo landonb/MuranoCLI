@@ -1,7 +1,8 @@
-# Last Modified: 2017.10.26 /coding: utf-8
-# Copyright © 2016-2017 Exosite LLC.
-# License: MIT. See LICENSE.txt.
-#  vim:tw=0:ts=2:sw=2:et:ai
+# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# License: PROPRIETARY. See LICENSE.txt.
+# Unauthorized copying of this file is strictly prohibited.
+# frozen_string_literal: true
+# vim:tw=0:ts=2:sw=2:et:ai
 
 # USAGE:
 #
@@ -110,7 +111,7 @@ Style/EmptyMethod:
   Enabled: false
 
 # "The name of this source file (Xxxxxxx.rb) should use snake_case."
-Style/FileName:
+Naming/FileName:
   Exclude:
     - 'Gemfile'
     - 'MuranoCLI.gemspec'
