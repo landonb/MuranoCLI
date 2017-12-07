@@ -88,6 +88,8 @@ module MrMurano
       # @return [Object] The value
       def [](key)
         public_send(key.to_sym)
+      rescue NoMethodError
+        nil
       end
 
       # Set attribute as if this was a Hash
@@ -908,31 +910,19 @@ module MrMurano
 
       therebox, localbox = items_lists(options, selected)
 
-      toadd, todel = items_new_and_old(options, therebox, localbox)
+      statuses = { skipd: [] }
 
-      tomod, unchg = items_mods_and_chgs(options, therebox, localbox)
+      items_new_and_old!(statuses, options, therebox, localbox)
 
-      clash = items_cull_clashes!([toadd, todel, tomod, unchg])
+      items_mods_and_chgs!(statuses, options, therebox, localbox)
 
-      if options[:unselected]
-        {
-          toadd: toadd,
-          todel: todel,
-          tomod: tomod,
-          unchg: unchg,
-          skipd: [],
-          clash: clash,
-        }
-      else
-        {
-          toadd: select_selected(toadd),
-          todel: select_selected(todel),
-          tomod: select_selected(tomod),
-          unchg: select_selected(unchg),
-          skipd: [],
-          clash: select_selected(clash),
-        }
-      end
+      statuses.merge!(statuses) { |_key, val1, _val2| sort_by_name(val1) }
+
+      items_cull_clashes!(statuses)
+
+      statuses.each_value { |items| select_selected(items) } unless options[:unselected]
+
+      statuses
     end
 
     def filter_solution(options)
@@ -1038,7 +1028,7 @@ module MrMurano
       [therebox, localbox]
     end
 
-    def items_new_and_old(options, therebox, localbox)
+    def items_new_and_old!(statuses, options, therebox, localbox)
       if options[:asdown]
         todel = (localbox.keys - therebox.keys).map { |key| localbox[key] }
         toadd = (therebox.keys - localbox.keys).map { |key| therebox[key] }
@@ -1046,36 +1036,58 @@ module MrMurano
         toadd = (localbox.keys - therebox.keys).map { |key| localbox[key] }
         todel = (therebox.keys - localbox.keys).map { |key| therebox[key] }
       end
-      [sort_by_name(toadd), sort_by_name(todel)]
+      statuses[:toadd] = toadd
+      statuses[:todel] = todel
     end
 
-    def items_mods_and_chgs(options, therebox, localbox)
+    def items_mods_and_chgs!(statuses, options, therebox, localbox)
       tomod = []
       unchg = []
+      toadd = []
+      todel = []
 
       (localbox.keys & therebox.keys).each do |key|
+        local = localbox[key]
+        there = therebox[key]
         # Skip this item if it's got duplicate conflicts.
-        next if !localbox[key].is_a?(Hash) && localbox[key].dup_count == 0
-        # Want 'local' to override 'there' except for itemkey.
+        next if !local.is_a?(Hash) && local.dup_count == 0
         if options[:asdown]
-          mrg = therebox[key].reject { |k, _v| k == @itemkey.to_sym }
-          mrg = localbox[key].merge(mrg)
+          # Want 'there' to override 'local'.
+          mrg = local.merge(there)
         else
-          mrg = localbox[key].reject { |k, _v| k == @itemkey.to_sym }
-          mrg = therebox[key].merge(mrg)
+          # Want 'local' to override 'there' except for itemkey.
+          mrg = local.reject { |k, _v| k == @itemkey.to_sym }
+          mrg = there.merge(mrg)
         end
 
-        if docmp(localbox[key], therebox[key])
-          if options[:diff] && mrg[:selected]
-            mrg[:diff] = dodiff(mrg.to_h, localbox[key], therebox[key], options[:asdown])
+        if docmp(local, there)
+          if (options[:diff] || local[:phantom]) && mrg[:selected]
+            mrg[:diff] = dodiff(mrg.to_h, local, there, options)
+            if mrg[:diff].to_s.empty?
+              debug %(Clean diff: #{local[:synckey]})
+              unchg << mrg
+            elsif local[:phantom]
+              if options[:asdown]
+                toadd << mrg
+              else
+                todel << mrg
+              end
+              localbox.delete(key)
+            else
+              tomod << mrg
+            end
+          else
+            tomod << mrg
           end
-          tomod << mrg
         else
           unchg << mrg
         end
       end
 
-      [sort_by_name(tomod), sort_by_name(unchg)]
+      statuses[:tomod] = tomod
+      statuses[:unchg] = unchg
+      statuses[:toadd] += toadd
+      statuses[:todel] += todel
     end
 
     def sort_by_name(list)
@@ -1090,13 +1102,13 @@ module MrMurano
     end
 
     def select_selected(items)
-      items.select { |i| i[:selected] }.map { |i| i.delete(:selected); i }
+      items.select! { |i| i[:selected] }
+      items.map { |i| i.delete(:selected); i }
     end
 
-    def items_cull_clashes!(items_list)
-      items_list = [items_list] unless items_list.is_a?(Array)
+    def items_cull_clashes!(statuses)
       clash = []
-      items_list.each do |items|
+      statuses.each_value do |items|
         items.select! do |item|
           if item[:dup_count].nil?
             true
@@ -1109,7 +1121,7 @@ module MrMurano
           end
         end
       end
-      clash
+      statuses[:clash] = clash
     end
   end
 end
