@@ -659,7 +659,7 @@ module MrMurano
       if $cfg['tool.no-progress']
         say(msg)
       else
-        MrMurano::Verbose.verbose(msg + "\n")
+        verbose(msg + "\n")
       end
     end
 
