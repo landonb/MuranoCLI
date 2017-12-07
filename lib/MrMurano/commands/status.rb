@@ -6,6 +6,7 @@
 # Unauthorized copying of this file is strictly prohibited.
 
 require 'inflecto'
+require 'pathname'
 require 'MrMurano/verbosing'
 require 'MrMurano/SyncRoot'
 

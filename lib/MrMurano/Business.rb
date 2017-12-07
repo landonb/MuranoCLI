@@ -8,7 +8,6 @@
 require 'inflecto'
 require 'json'
 require 'net/http'
-require 'pathname'
 require 'rainbow'
 require 'uri'
 require 'yaml'

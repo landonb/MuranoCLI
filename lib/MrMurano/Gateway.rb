@@ -8,6 +8,7 @@
 require 'http/form_data'
 require 'json-schema'
 require 'net/http'
+require 'pathname'
 require 'uri'
 require 'MrMurano/hash'
 require 'MrMurano/http'

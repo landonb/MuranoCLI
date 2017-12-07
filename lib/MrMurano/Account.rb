@@ -7,7 +7,6 @@
 
 require 'json'
 require 'net/http'
-require 'pathname'
 require 'uri'
 require 'yaml'
 require 'MrMurano/hash'

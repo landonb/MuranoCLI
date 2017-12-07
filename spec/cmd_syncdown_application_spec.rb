@@ -7,7 +7,6 @@
 
 require 'fileutils'
 require 'open3'
-require 'pathname'
 require 'cmd_common'
 
 # NOTE: This file is a copy of, and subset of, cmd_syncdown_both_spec.rb.

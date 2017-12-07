@@ -5,6 +5,7 @@
 # vim:tw=0:ts=2:sw=2:et:ai
 # Unauthorized copying of this file is strictly prohibited.
 
+require 'pathname'
 require 'MrMurano/version'
 require 'MrMurano/ProjectFile'
 require 'MrMurano/Webservice-File'

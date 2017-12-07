@@ -7,6 +7,7 @@
 
 require 'json'
 require 'net/http'
+require 'pathname'
 require 'pp'
 require 'uri'
 require 'MrMurano/SyncRoot'

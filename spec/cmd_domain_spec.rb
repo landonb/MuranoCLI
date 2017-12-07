@@ -7,7 +7,6 @@
 
 require 'fileutils'
 require 'open3'
-require 'pathname'
 require 'cmd_common'
 
 RSpec.describe 'murano domain', :cmd, :needs_password do
