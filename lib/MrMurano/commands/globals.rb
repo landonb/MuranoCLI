@@ -12,6 +12,11 @@ global_option('--[no-]color', %(Disable fancy output)) do |value|
   Rainbow.enabled = value
 end
 
+global_option('--sid VALUE', %(Override project specified application and product IDs)) do |value|
+  $cfg['application.id'] = value
+  $cfg['product.id'] = value
+end
+
 global_option('-c', '--config KEY=VALUE', %(Set a single config key)) do |param|
   key, value = param.split('=', 2)
   # a=b :> ["a", "b"]
