@@ -41,9 +41,9 @@ module MrMurano
       if line.key?(:timestamp)
         if line[:timestamp].is_a? Numeric
           if options.localtime
-            curtime = Time.at(line[:timestamp]).localtime.to_datetime.iso8601(3)
+            curtime = Time.at(line[:timestamp]).localtime.strftime('%Y-%m-%d %H:%M:%S')
           else
-            curtime = Time.at(line[:timestamp]).gmtime.to_datetime.iso8601(3)
+            curtime = Time.at(line[:timestamp]).gmtime.strftime('%Y-%m-%d %H:%M:%S')
           end
         else
           curtime = line[:timestamp]
