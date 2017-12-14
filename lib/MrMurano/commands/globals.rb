@@ -84,3 +84,7 @@ global_option('-V', '--verbose', %(Be chatty)) do
   $cfg['tool.verbose'] = true
 end
 
+global_option('--debug', %(Show debug messages)) do
+  $cfg['tool.debug'] = true
+end
+
