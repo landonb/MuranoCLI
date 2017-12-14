@@ -163,7 +163,7 @@ module MrMurano
           else
             curtime = time_secs_epoch.gmtime
           end
-          curtime = curtime.strftime('%Y-%m-%d %M:%S')
+          curtime = curtime.strftime('%Y-%m-%d %H:%M:%S')
         else
           curtime = line[:timestamp]
         end
