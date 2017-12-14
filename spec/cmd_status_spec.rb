@@ -18,23 +18,20 @@ RSpec.describe 'murano status', :cmd, :needs_password do
 
   before(:example) do
     @product_name = rname('statusTest')
-    out, err, status = Open3.capture3(capcmd('murano', 'product', 'create', @product_name, '--save'))
+    out, err, status = Open3.capture3(
+      capcmd('murano', 'product', 'create', @product_name, '--save')
+    )
     expect(err).to eq('')
     expect(out.chomp).to match(/^[a-zA-Z0-9]+$/)
     expect(status.exitstatus).to eq(0)
 
     @applctn_name = rname('statusTest')
-    out, err, status = Open3.capture3(capcmd('murano', 'application', 'create', @applctn_name, '--save'))
+    out, err, status = Open3.capture3(
+      capcmd('murano', 'application', 'create', @applctn_name, '--save')
+    )
     expect(err).to eq('')
     expect(out.chomp).to match(/^[a-zA-Z0-9]+$/)
     expect(status.exitstatus).to eq(0)
-
-    #out, err, status = Open3.capture3(capcmd('murano', 'assign', 'set'))
-    #olines = out.lines
-    #expect(olines[0]).to eq("Linked ‘#{@product_name}’ to ‘#{@applctn_name}’\n")
-    #expect(olines[1]).to eq("Created default event handler\n")
-    #expect(err).to eq('')
-    #expect(status.exitstatus).to eq(0)
 
     out, err, status = Open3.capture3(
       #capcmd('murano', 'syncdown', '--eventhandlers', '--no-delete', '--no-update')
@@ -56,12 +53,16 @@ RSpec.describe 'murano status', :cmd, :needs_password do
   end
 
   after(:example) do
-    out, err, status = Open3.capture3(capcmd('murano', 'solution', 'delete', @applctn_name, '-y'))
+    out, err, status = Open3.capture3(
+      capcmd('murano', 'solution', 'delete', @applctn_name, '-y')
+    )
     expect(out).to eq('')
     expect(err).to eq('')
     expect(status.exitstatus).to eq(0)
 
-    out, err, status = Open3.capture3(capcmd('murano', 'solution', 'delete', @product_name, '-y'))
+    out, err, status = Open3.capture3(
+      capcmd('murano', 'solution', 'delete', @product_name, '-y')
+    )
     expect(out).to eq('')
     expect(err).to eq('')
     expect(status.exitstatus).to eq(0)
@@ -230,7 +231,10 @@ RSpec.describe 'murano status', :cmd, :needs_password do
         File.join(@testdir, 'spec/fixtures/product_spec_files/lightbulb.yaml'),
         'specs/resources.yaml',
       )
-      FileUtils.copy(File.join(@testdir, 'spec/fixtures/ProjectFiles/only_meta.yaml'), 'test.murano')
+      FileUtils.copy(
+        File.join(@testdir, 'spec/fixtures/ProjectFiles/only_meta.yaml'),
+        'test.murano'
+      )
     end
 
     it 'status' do
@@ -325,7 +329,8 @@ RSpec.describe 'murano status', :cmd, :needs_password do
           default_page: 'index.html',
           assets: 'files',
           routes: 'routes/manyRoutes.lua',
-          # Note that singleRoute.lua is not included, so it won't be seen by status command.
+          # Note that singleRoute.lua is not included, so it won't be seen
+          # by status command.
           modules: {
             table_util: 'modules/table_util.lua',
           },

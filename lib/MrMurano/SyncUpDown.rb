@@ -5,30 +5,22 @@
 # vim:tw=0:ts=2:sw=2:et:ai
 # Unauthorized copying of this file is strictly prohibited.
 
-# FIXME/MAYBE: Fix semicolon usage.
-# rubocop:disable Style/Semicolon
-
 require 'inflecto'
 require 'open3'
 require 'os'
 require 'pathname'
-#require 'shellwords'
 require 'tempfile'
 require 'time'
 require 'MrMurano/progress'
 require 'MrMurano/verbosing'
 require 'MrMurano/hash'
-#require 'MrMurano/Config'
-#require 'MrMurano/ProjectFile'
 require 'MrMurano/SyncAllowed'
-##require 'MrMurano/SyncRoot'
 
 module MrMurano
   ## The functionality of a Syncable thing.
   #
-  # This provides the logic for computing what things have changed, and pushing and
-  # pulling those things.
-  #
+  # This provides the logic for computing what things have changed,
+  # and pushing and pulling those things.
   module SyncUpDown
     include SyncAllowed
 
@@ -321,7 +313,7 @@ module MrMurano
           id = item[:id]
         end
         if id.to_s.empty?
-          debug %(Remote item "#{item[:name]}" missing :id / local: #{local} / item: #{item})
+          debug %(Missing id: remote: #{item[:name]} / local: #{local} / item: #{item})
           return if options[:ignore_errors]
           error %(Remote item missing :id => #{local})
           say %(You can ignore this error using --ignore-errors)
@@ -546,6 +538,11 @@ module MrMurano
       items.values
     end
 
+    # Some items are considered "undeletable", meaning if a corresponding
+    # file does not exist locally, or if the user deletes such a file, we
+    # do not delete it on the server, but instead set it to the empty string.
+    # The reverse is also true: if a service script on the platform is empty,
+    # we do not need to create a file for it locally.
     def resurrect_undeletables(localbox, _therebox)
       # It's up to the Syncables to implement this, if they care.
       localbox
@@ -599,7 +596,7 @@ module MrMurano
         if ::File.directory?(path)
           true
         else
-          ignoring.any? { |pattern| self.ignore?(path, pattern) }
+          ignoring.any? { |pattern| ignore?(path, pattern) }
         end
       end
       items = items.map do |path|
@@ -614,7 +611,10 @@ module MrMurano
         end
         item = to_remote_item(from, rpath)
         if item.is_a?(Array)
-          item.compact.map { |i| i[:local_path] = rpath; i }
+          item.compact.map do |itm|
+            itm[:local_path] = rpath
+            itm
+          end
         elsif !item.nil?
           item[:local_path] = rpath
           item
@@ -1026,9 +1026,6 @@ module MrMurano
         localbox[skey] = item
       end
 
-      # Some items are considered "undeletable", meaning if a
-      # corresponding file does not exist locally, we assume
-      # it does but is just set to the empty string.
       localbox = resurrect_undeletables(localbox, therebox)
 
       [therebox, localbox]
@@ -1108,8 +1105,11 @@ module MrMurano
     end
 
     def select_selected(items)
-      items.select! { |i| i[:selected] }
-      items.map { |i| i.delete(:selected); i }
+      items.select! { |item| item[:selected] }
+      items.map do |item|
+        item.delete(:selected)
+        item
+      end
     end
 
     def items_cull_clashes!(statuses)

@@ -85,7 +85,6 @@ module MrMurano
 
       name = mkname(thereitem)
       pst = thereitem.to_h.merge(
-        #solution_id: $cfg[@solntype],
         solution_id: @api_id,
         script: script,
         alias: mkalias(thereitem),
@@ -169,7 +168,7 @@ module MrMurano
       item_a[:updated_at].to_time.round != item_b[:updated_at].to_time.round
     end
 
-    def dodiff(merged, local, there, asdown=false)
+    def dodiff(merged, local, there, _options={})
       mrg_diff = super
       if mrg_diff.empty?
         mrg_diff = '<Nothing changed (was timestamp difference)>'
@@ -291,7 +290,6 @@ module MrMurano
 
     def mkalias(remote)
       raise "Missing parts! #{remote.to_h.to_json}" if remote.name.nil?
-      #[$cfg[@solntype], remote[:name]].join('_')
       [@api_id, remote[:name]].join('_')
     end
 
@@ -459,14 +457,10 @@ module MrMurano
       )
       if event.nil? || item[:event] == '*'
         svc_match
+      elsif service == '*'
+        event == item[:event]
       else
-        # rubocop:disable Style/IfInsideElse
-        #svc_evt == "#{item[:service]}.#{item[:event]}"
-        if service == '*'
-          event == item[:event]
-        else
-          svc_match && event == item[:event]
-        end
+        svc_match && event == item[:event]
       end
     end
 
@@ -548,7 +542,6 @@ module MrMurano
             svc_alias: svc_alias,
           )
         elsif !cur.nil? && !cur[:script].nil?
-          # 2017-07-02: Frozen string literal: change << to +=
           cur[:script] += line
         end
         lineno += 1
@@ -685,7 +678,7 @@ module MrMurano
     def resurrect_undeletables(localbox, therebox)
       undeletables = ($cfg['eventhandler.undeletable'] || '').split
       (therebox.keys - localbox.keys).each do |key|
-        # key exists in therebox but not localbox.
+        # The key exists in therebox but not localbox.
         thereitem = therebox[key]
         next unless undeletable?(thereitem, undeletables)
         debug "Undeletable: #{key}"
@@ -693,11 +686,8 @@ module MrMurano
         undeletable.id = nil
         undeletable.created_at = nil
         undeletable.updated_at = nil
-        #undeletable.local_path
-        #undeletable.line
         # Even if the user deletes the contents of a script,
         # the platform still sends the magic header.
-        #undeletable.script = ''
         undeletable.script = (
           "--#EVENT #{therebox[key].service} #{therebox[key].event}\n"
         )
