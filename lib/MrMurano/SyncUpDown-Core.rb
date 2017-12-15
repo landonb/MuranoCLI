@@ -242,12 +242,9 @@ module MrMurano
           item[:selected] = patterns.any? do |pattern|
             if pattern.to_s[0] == '#'
               match(item, pattern)
-            elsif !defined?(item.local_path) || item.local_path.nil?
-              into = location
-              lpath = tolocalpath(into, item)
-              lpath.to_s.include? pattern
             else
-              item[:local_path].to_s.include? pattern
+              lpath = _matcher_local_path(item)
+              _matcher_check_pattern(lpath, pattern)
             end
           end
         end
@@ -255,6 +252,36 @@ module MrMurano
       end
     end
     private :_matcher
+
+    def _matcher_local_path(item)
+      if !defined?(item.local_path) || item.local_path.nil?
+        into = location
+        tolocalpath(into, item)
+      else
+        item[:local_path]
+      end
+    end
+    private :_matcher_local_path
+
+    def _matcher_check_pattern(lpath, pattern)
+      # If the user quoted their search, do not try globbing it.
+      strict = true if pattern =~ /^(['"]).*\1$/
+      # Remove the strict quotes, if present.
+      pattern = pattern.gsub(/^['"]|['"]$/, '') if strict
+      # Note that fnmatch won't match part of the path without *globbing*.
+      # E.g., pattern=file won't match /my/mfile, but pattern=*file will.
+      return true if lpath.fnmatch? pattern
+      return false if strict
+      # Be nice and try globbing the start of the path. E.g., if user
+      # specifies pattern=relative/path/to/file.rb, we should retry their
+      # request as */relative/path/to/file.rb. But don't glob if it looks
+      # like the user is already globbing or using absolutes.
+      return false if pattern.to_s.start_with?(File::SEPARATOR)
+      # See if the pattern includes any '*' that are not \-delimited.
+      return false if pattern.to_s =~ /(?<!\\)\*/
+      lpath.fnmatch? "*/#{pattern}"
+    end
+    private :_matcher_check_pattern
 
     ## Get status of things here verses there
     #

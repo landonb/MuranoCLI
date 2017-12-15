@@ -191,7 +191,10 @@ RSpec.describe 'murano status', :cmd, :needs_password do
     end
 
     it 'matches file path', :broken_on_windows do
-      out, err, status = Open3.capture3(capcmd('murano', 'status', '**/icon.png'))
+      # capcmd calls shellwords, which escapes strings so that Open3 doesn't
+      # expand them. E.g., **/ would expand to the local directory name.
+      status_cmd = capcmd('murano', 'status', '**/icon.png')
+      out, err, status = Open3.capture3(status_cmd)
       expect(err).to eq('')
       expect(out.lines).to match(
         [
