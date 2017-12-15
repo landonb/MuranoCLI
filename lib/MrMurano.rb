@@ -47,6 +47,8 @@ require 'MrMurano/Webservice-File'
 require 'MrMurano/SyncAllowed'
 require 'MrMurano/SyncRoot'
 require 'MrMurano/SyncUpDown'
+require 'MrMurano/SyncUpDown-Core'
+require 'MrMurano/SyncUpDown-Item'
 
 require 'MrMurano/SubCmdGroupContext'
 require 'MrMurano/ReCommander'
