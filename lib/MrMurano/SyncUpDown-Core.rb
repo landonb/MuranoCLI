@@ -421,6 +421,7 @@ module MrMurano
             mrg[:diff] = dodiff(mrg.to_h, local, there, options)
             if mrg[:diff].to_s.empty?
               debug %(Clean diff: #{local[:synckey]})
+              mrg[:diff] = '<Nothing changed (was timestamp difference)>'
               unchg << mrg
             elsif local[:phantom]
               if options[:asdown]

@@ -171,7 +171,6 @@ module MrMurano
     def dodiff(merged, local, there, _options={})
       mrg_diff = super
       if mrg_diff.empty?
-        mrg_diff = '<Nothing changed (was timestamp difference)>'
         # FIXME/2017-08-08: This isn't exactly working: setting mtime...
         cache_update_time_for(local.local_path, there.updated_at)
       end
