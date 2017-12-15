@@ -312,87 +312,100 @@ module MrMurano
     # This collects items in the project and all bundles.
     # @return [Array<Item>] items found
     #
-    # 2017-07-02: [lb] removed this commented-out code from the locallist
-    # body. I think it's for older Solutionfiles, like 0.2.0 and 0.3.0.
-    #def locallist
-    #  # so. if @locationbase/bundles exists
-    #  #  gather and merge: @locationbase/bundles/*/@location
-    #  # then merge @locationbase/@location
-    #  #
-    #  bundleDir = $cfg['location.bundles'] or 'bundles'
-    #  bundleDir = 'bundles' if bundleDir.nil?
-    #  items = {}
-    #  if (@locationbase + bundleDir).directory?
-    #    (@locationbase + bundleDir).children.sort.each do |bndl|
-    #      if (bndl + @location).exist?
-    #        verbose("Loading from bundle #{bndl.basename}")
-    #        bitems = localitems(bndl + @location)
-    #        bitems.map!{|b| b[:bundled] = true; b} # mark items from bundles.
-    #        # use synckey for quicker merging.
-    #        bitems.each { |b| items[synckey(b)] = b }
+    # 2017-07-02: [lb] removed this commented-out code from locallist body.
+    #   See "Bundles" comments in TODO.taskpaper.
+    #   This code builds the list of local items from all bundle
+    #   subdirectories. Would that be how a bundles implementation
+    #   works? Or would we rather just iterate over each bundle and
+    #   process them separately, rather than all together at once?
+    #
+    #    def locallist
+    #      # so. if @locationbase/bundles exists
+    #      #  gather and merge: @locationbase/bundles/*/@location
+    #      # then merge @locationbase/@location
+    #      #
+    #      bundleDir = $cfg['location.bundles'] or 'bundles'
+    #      bundleDir = 'bundles' if bundleDir.nil?
+    #      items = {}
+    #      if (@locationbase + bundleDir).directory?
+    #        (@locationbase + bundleDir).children.sort.each do |bndl|
+    #          if (bndl + @location).exist?
+    #            verbose("Loading from bundle #{bndl.basename}")
+    #            bitems = localitems(bndl + @location)
+    #            bitems.map!{|b| b[:bundled] = true; b} # mark items from bundles.
+    #            # use synckey for quicker merging.
+    #            bitems.each { |b| items[synckey(b)] = b }
+    #          end
+    #        end
     #      end
     #    end
-    #  end
-    #end
     #
     def locallist(skip_warn: false)
       items = {}
       if location.exist?
         # Get a list of SyncUpDown::Item's, or a class derived thereof.
         bitems = localitems(location)
-        # Use synckey for quicker merging.
-        #bitems.each { |b| items[synckey(b)] = b }
-        # 2017-07-02: If two files have the same identity, the simple loop
-        #   masks that there are two files with the same identity. So check
-        #   first for duplicates, and then process each item.
-        seen = {}
-        bitems.each do |item|
-          skey = synckey(item)
-          seen[skey] = seen.key?(skey) && seen[skey] + 1 || 1
-        end
+        # Check for duplicates first -- two files with the same identity.
+        seen = locallist_mark_seen(bitems)
         counts = {}
         bitems.each do |item|
-          skey = synckey(item)
-          if seen[skey] > 1
-            if items[skey].nil?
-              items[skey] = MrMurano::EventHandler::EventHandlerItem.new(item)
-              items[skey][:dup_count] = 0
-            end
-            counts[skey] = counts.key?(skey) && counts[skey] + 1 || 1
-            # Use a unique synckey so all duplicates make it in the list.
-            uniq_synckey = "#{skey}-#{counts[skey]}"
-            item[:dup_count] = counts[skey]
-            # This sets the alias for the output, so duplicates look unique.
-            item[@itemkey.to_sym] = uniq_synckey
-            items[uniq_synckey] = item
-            msg = "Duplicate definition found for #{fancy_ticks(skey)}"
-            if self.class.description.to_s != ''
-              msg += " for #{fancy_ticks(self.class.description)}"
-            end
-            warning(msg)
-            warning(" #{item.local_path}")
-          else
-            items[skey] = item
-          end
+          locallist_add_item(item, items, seen, counts)
         end
       elsif !skip_warn
-        @missing_complaints = [] unless defined?(@missing_complaints)
-        unless @missing_complaints.include?(location)
-          # MEH/2017-07-31: This message is a little misleading on syncdown,
-          #   e.g., in rspec ./spec/cmd_syncdown_spec.rb, one test blows away
-          #   local directories and does a syncdown, and on stderr you'll see
-          #     Skipping missing location
-          #      ‘/tmp/d20170731-3150-1f50uj4/project/specs/resources.yaml’ (Resources)
-          #   but then later in the syncdown, that directory and file gets created.
-          msg = "Skipping missing location #{fancy_ticks(location)}"
-          unless self.class.description.to_s.empty?
-            msg += " (#{Inflecto.pluralize(self.class.description)})"
-          end
-          warning(msg)
-          @missing_complaints << location
-        end
+        locallist_complain_missing
       end
       items.values
+    end
+
+    def locallist_mark_seen(bitems)
+      seen = {}
+      bitems.each do |item|
+        skey = synckey(item)
+        seen[skey] = seen.key?(skey) && seen[skey] + 1 || 1
+      end
+      seen
+    end
+
+    def locallist_add_item(item, items, seen, counts)
+      skey = synckey(item)
+      if seen[skey] > 1
+        if items[skey].nil?
+          items[skey] = MrMurano::EventHandler::EventHandlerItem.new(item)
+          items[skey][:dup_count] = 0
+        end
+        counts[skey] = counts.key?(skey) && counts[skey] + 1 || 1
+        # Use a unique synckey so all duplicates make it in the list.
+        uniq_synckey = "#{skey}-#{counts[skey]}"
+        item[:dup_count] = counts[skey]
+        # This sets the alias for the output, so duplicates look unique.
+        item[@itemkey.to_sym] = uniq_synckey
+        items[uniq_synckey] = item
+        msg = "Duplicate definition found for #{fancy_ticks(skey)}"
+        if self.class.description.to_s != ''
+          msg += " for #{fancy_ticks(self.class.description)}"
+        end
+        warning(msg)
+        warning(" #{item.local_path}")
+      else
+        items[skey] = item
+      end
+    end
+
+    def locallist_complain_missing
+      @missing_complaints = [] unless defined?(@missing_complaints)
+      return if @missing_complaints.include?(location)
+      # MEH/2017-07-31: This message is a little misleading on syncdown,
+      #   e.g., in rspec ./spec/cmd_syncdown_spec.rb, one test blows away
+      #   local directories and does a syncdown, and on stderr you'll see
+      #     Skipping missing location
+      #      ‘/tmp/d20170731-3150-1f50uj4/project/specs/resources.yaml’ (Resources)
+      #   but then later in the syncdown, that directory and file gets created.
+      msg = "Skipping missing location #{fancy_ticks(location)}"
+      unless self.class.description.to_s.empty?
+        msg += " (#{Inflecto.pluralize(self.class.description)})"
+      end
+      warning(msg)
+      @missing_complaints << location
     end
 
     # Some items are considered "undeletable", meaning if a corresponding

@@ -680,21 +680,7 @@ module MrMurano
         # The key exists in therebox but not localbox.
         thereitem = therebox[key]
         next unless undeletable?(thereitem, undeletables)
-        debug "Undeletable: #{key}"
-        undeletable = EventHandlerItem.new(thereitem)
-        undeletable.id = nil
-        undeletable.created_at = nil
-        undeletable.updated_at = nil
-        # Even if the user deletes the contents of a script,
-        # the platform still sends the magic header.
-        undeletable.script = (
-          "--#EVENT #{therebox[key].service} #{therebox[key].event}\n"
-        )
-        undeletable.local_path = Pathname.new(
-          File.join(location, tolocalname(thereitem, key))
-        )
-        undeletable.phantom = true
-        localbox[key] = undeletable
+        resurrect_undeletable(key, localbox, therebox, thereitem)
       end
       localbox
     end
@@ -704,6 +690,25 @@ module MrMurano
       undeletables.any? do |svc_evt|
         cmp_svc_evt(item, svc_evt)
       end
+    end
+
+    def resurrect_undeletable(key, localbox, therebox, thereitem)
+      debug "Undeletable: #{key}"
+      undeletable = EventHandlerItem.new(thereitem)
+      undeletable.id = nil
+      undeletable.created_at = nil
+      undeletable.updated_at = nil
+      # Even if the user deletes the contents of a script,
+      # the platform still sends the magic header.
+      undeletable.script = (
+        "--#EVENT #{therebox[key].service} #{therebox[key].event}\n"
+      )
+      undeletable.local_path = Pathname.new(
+        File.join(location, tolocalname(thereitem, key))
+      )
+      undeletable.phantom = true
+      undeletable.undeletable = true
+      localbox[key] = undeletable
     end
   end
 
