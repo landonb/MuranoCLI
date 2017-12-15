@@ -417,7 +417,7 @@ module MrMurano
         end
 
         if docmp(local, there)
-          if (options[:diff] || local[:phantom]) && mrg[:selected]
+          if (options[:diff] || local[:phantom] || local[:undeletable]) && mrg[:selected]
             mrg[:diff] = dodiff(mrg.to_h, local, there, options)
             if mrg[:diff].to_s.empty?
               debug %(Clean diff: #{local[:synckey]})
