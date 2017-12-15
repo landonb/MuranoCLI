@@ -10,7 +10,6 @@ require 'os'
 require 'pathname'
 require 'time'
 require 'MrMurano/verbosing'
-#require 'MrMurano/Solution-Services'
 require 'MrMurano/SyncAllowed'
 require 'MrMurano/SyncUpDown-Core'
 require 'MrMurano/SyncUpDown-Item'
@@ -373,7 +372,7 @@ module MrMurano
       skey = synckey(item)
       if seen[skey] > 1
         if items[skey].nil?
-          items[skey] = MrMurano::EventHandler::EventHandlerItem.new(item)
+          items[skey] = item.clone
           items[skey][:dup_count] = 0
         end
         counts[skey] = counts.key?(skey) && counts[skey] + 1 || 1
