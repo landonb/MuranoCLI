@@ -131,7 +131,7 @@ module MrMurano
           num_synced += 1
         end
       end
-      syncdown_after(into)
+      num_synced += syncdown_after(into)
 
       num_synced
     end

@@ -10,6 +10,7 @@ require 'os'
 require 'pathname'
 require 'time'
 require 'MrMurano/verbosing'
+#require 'MrMurano/Solution-Services'
 require 'MrMurano/SyncAllowed'
 require 'MrMurano/SyncUpDown-Core'
 require 'MrMurano/SyncUpDown-Item'
@@ -279,6 +280,7 @@ module MrMurano
     end
 
     def syncup_after
+      0
     end
 
     def syncdown_before
@@ -286,6 +288,7 @@ module MrMurano
     end
 
     def syncdown_after(_local)
+      0
     end
 
     def diff_item_write(io, merged, _local, _remote)
