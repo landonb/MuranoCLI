@@ -81,6 +81,7 @@ announcement() {
   say "###################################################################"
   say "$1"
   say "###################################################################"
+  [[ "$2" != '' ]] && say "$2"
   say
 }
 
@@ -99,7 +100,6 @@ death() {
 
 # FIXME/2017-09-28: Move this and other common fcns. to home-fries?
 lock_kill_die() {
-  #say "Looking for lock on $(date)..."
   say "Desperately Seeking Lock on $(date)..."
   [[ "$1" == true ]] && local AFTER_WAIT=true || local AFTER_WAIT=false
   local build_it=false
@@ -188,8 +188,9 @@ lock_kill_or_die() {
 }
 
 prepare_to_build() {
-  #/bin/rm "${DONE_FILE}"
-  #/bin/rm "${OUT_FILE}"
+  rmdir "${KILL_DIR}"
+  say
+  say "See you on the other side!"
   touch "${OUT_FILE}"
   truncate -s 0 "${OUT_FILE}"
 }
@@ -209,7 +210,7 @@ lang_it() {
 }
 
 build_it() {
-  annoucement "BUILD IT"
+  announcement "BUILD IT"
 
   echo "cwd: $(pwd)" >> ${OUT_FILE}
   echo "- ruby -v: $(ruby -v)" >> ${OUT_FILE}
@@ -223,24 +224,36 @@ build_it() {
 }
 
 lint_it() {
-  annoucement "LINT IT"
+  announcement "LINT IT"
   rubocop -D -c .rubocop.yml &>> ${OUT_FILE}
 }
 
 rspec_it() {
-  annoucement "RSPEC IT"
+  announcement "RSPEC IT"
   rake rspec &>> ${OUT_FILE}
 }
 
 ctags_it() {
-  annoucement "CTAGS IT"
-  ctags -R \
-    --exclude=coverage \
-    --exclude=docs \
-    --exclude=pkg \
-    --exclude=report \
-    --verbose=yes
-    #--exclude=spec \
+  announcement "CTAGS IT"
+  local ctags_out=$( { \
+    ctags -R \
+      --exclude=coverage \
+      --exclude=docs \
+      --exclude=pkg \
+      --exclude=report \
+      --verbose=yes \
+    ; \
+  } 2>&1 )
+  if [[ $? -ne 0 ]]; then
+    say
+    say 'ctags FAILED!'
+    say '                                      '
+    say
+    say "${ctags_out}"
+    say
+    say '                                      '
+    say
+  fi
   /bin/ls -la tags >> ${OUT_FILE}
 }
 
@@ -264,7 +277,9 @@ main() {
 
   trap death SIGUSR1
 
-  announcement "❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎"
+  say
+  say "              󷎟  󲁹  󲁭  󲁨  🚷  🐧  🐨  🐫  🐬  🐰  🐳  🐎 "
+  announcement "  ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎   ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎ ❎"
 
   init_it
 
@@ -276,11 +291,10 @@ main() {
   echo "kill -s SIGUSR1 $$" > "${KILL_BIN}"
   chmod 755 "${KILL_BIN}"
 
-  # 2017-10-17: Always build tags.
-# 2017-11-13 14:49: WTF?: When run alone, fine; when from Vim, spinning!
-#  ctags_it
+  # Always build tags.
+  ctags_it
 
-  say "WAITING ON BUILD (countdown: ${BUILD_DELAY_SECS} secs.)..."
+  announcement "WAITING ON BUILD" "Countdown: ${BUILD_DELAY_SECS} secs..."
 
   # Defer the build!
   # FIXME/2017-10-03: Riddle me this: is a two-fer rmdir atomic?
@@ -297,12 +311,11 @@ main() {
   # Or just wait.
   wait
 
-  say "READY TO BUILD..."
+  say "Ready to build..."
+  say
 
   # Get the lock.
   lock_kill_or_die
-
-  say "BUILDING!"
 
   if ${TESTING:-false}; then
     drop_locks
@@ -311,7 +324,6 @@ main() {
     exit
   fi
 
-  rmdir "${KILL_DIR}"
   prepare_to_build
 
   time_0=$(date +%s.%N)
@@ -334,8 +346,6 @@ main() {
 
   # MEH/2017-12-06: The tests take a number of seconds to run, so skipping.
   #test_it
-
-  ctags_it
 
   time_n=$(date +%s.%N)
   time_elapsed=$(echo "$time_n - $time_0" | bc -l)
