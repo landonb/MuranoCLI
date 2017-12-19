@@ -169,11 +169,12 @@ module MrMurano
       end
 
       def syncup_after
-        super
+        num_synced = super
         if !@there.empty?
           if !$cfg['tool.dry']
-            sync_update_progress('Updating product resources')
+            sync_update_progress('Updating remote product resources')
             upload_all(@there)
+            num_synced += 1
           else
             MrMurano::Verbose.whirly_interject do
               say('--dry: Not updating resources')
@@ -185,6 +186,7 @@ module MrMurano
           end
         end
         @there = nil
+        num_synced
       end
 
       ###################################################
@@ -235,12 +237,14 @@ module MrMurano
       end
 
       def syncdown_after(local)
-        super
-        resources_write(local)
+        num_synced = super
+        num_synced += resources_write(local)
         @here = nil
+        num_synced
       end
 
       def resources_write(file_path)
+        num_synced = 0
         # User can blow away specs/ directory if they want; we'll just make
         # a new one. [This code somewhat copy-paste from make_directory.]
         basedir = file_path
@@ -264,16 +268,22 @@ module MrMurano
           return
         end
 
+        sync_update_progress('Updating local product resources')
+
         file_path.open('wb') do |io|
           # convert array to hash
           res = {}
           @here.each do |value|
             key = value[:alias]
-            res[key] = Hash.transform_keys_to_strings(value.reject { |k, _v| k == :alias })
+            res[key] = Hash.transform_keys_to_strings(
+              value.reject { |k, _v| k == :alias }
+            )
           end
           ohash = ordered_hash(res)
           io.write ohash.to_yaml
         end
+
+        num_synced + 1
       end
 
       def diff_item_write(io, _merged, local, remote)

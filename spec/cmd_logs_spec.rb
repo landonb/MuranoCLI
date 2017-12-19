@@ -7,10 +7,9 @@
 
 require 'json'
 require 'open3'
-require 'uri'
-
 require 'socket'
 require 'timeout'
+require 'uri'
 
 require 'MrMurano/Config'
 require 'cmd_common'
@@ -32,6 +31,24 @@ RSpec.describe 'murano logs', :cmd, :needs_password do
 
     @acc = MrMurano::Account.instance
     allow(@acc).to receive(:login_info).and_return(email: 'bob', password: 'v')
+  end
+
+  # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
+  def supports_ws?
+    runner = ::Commander::Runner.instance
+    logs_cmd = runner.command(:logs)
+    logs_cmd.options.any? do |opt|
+      opt[:args].include? '--http'
+    end
+  end
+
+  def test_tail_log
+    stub_request_token
+    spawn_websocket_server
+    spawn_logs_stream_test_simple
+    run_logs_tail
+    wait_websocket_server
+    expect_output
   end
 
   def stub_request_token
@@ -138,12 +155,7 @@ message: #{JSON.generate(@blatherer.example_type_config_newservice)}
 
   context 'when project is setup' do
     it 'tail log' do
-      stub_request_token
-      spawn_websocket_server
-      spawn_logs_stream_test_simple
-      run_logs_tail
-      wait_websocket_server
-      expect_output
+      test_tail_log if supports_ws?
     end
   end
 end

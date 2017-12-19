@@ -85,7 +85,6 @@ module MrMurano
 
       name = mkname(thereitem)
       pst = thereitem.to_h.merge(
-        #solution_id: $cfg[@solntype],
         solution_id: @api_id,
         script: script,
         alias: mkalias(thereitem),
@@ -147,8 +146,13 @@ module MrMurano
       if item_a[:updated_at].nil? && item_a[:local_path]
         ct = cached_update_time_for(item_a[:local_path])
         item_a[:updated_at] = ct unless ct.nil?
-        # The item might not exist if it was resurrected (item.phantom).
         if ct.nil? && item_a[:local_path].exist?
+          # An undeletable item that's not indicated in the cache should be
+          # explicitly diffed, because the server creates the remote service
+          # automatically, and if the user creates one locally immediately
+          # after creating the solution, the local and remote twins might
+          # have temporally equivalent timestamps but different content.
+          return true if item_a[:undeletable]
           item_a[:updated_at] = item_a[:local_path].mtime.getutc
         end
       elsif item_a[:updated_at].is_a?(String)
@@ -158,6 +162,7 @@ module MrMurano
         ct = cached_update_time_for(item_b[:local_path])
         item_b[:updated_at] = ct unless ct.nil?
         if ct.nil? && item_b[:local_path].exist?
+          return true if item_b[:undeletable]
           item_b[:updated_at] = item_b[:local_path].mtime.getutc
         end
       elsif item_b[:updated_at].is_a?(String)
@@ -169,10 +174,9 @@ module MrMurano
       item_a[:updated_at].to_time.round != item_b[:updated_at].to_time.round
     end
 
-    def dodiff(merged, local, there, asdown=false)
+    def dodiff(merged, local, there, _options={})
       mrg_diff = super
       if mrg_diff.empty?
-        mrg_diff = '<Nothing changed (was timestamp difference)>'
         # FIXME/2017-08-08: This isn't exactly working: setting mtime...
         cache_update_time_for(local.local_path, there.updated_at)
       end
@@ -291,7 +295,6 @@ module MrMurano
 
     def mkalias(remote)
       raise "Missing parts! #{remote.to_h.to_json}" if remote.name.nil?
-      #[$cfg[@solntype], remote[:name]].join('_')
       [@api_id, remote[:name]].join('_')
     end
 
@@ -368,11 +371,14 @@ module MrMurano
       attr_accessor :type
       # @return [String] Service alias, e.g., "{product.id}"
       attr_accessor :svc_alias
-      # @return [Boolean] True if local phantom item via eventhandler.undeletable.
-      #                   I.e., the file does not exist locally and is the
-      #                   empty string on the server, so locally considered
-      #                   empty string, too.
+      # @return [Boolean] True if a "phantom", a script that exists on the
+      #                   server but is just the empty string. You cannot
+      #                   delete these services from the platform without
+      #                   breaking stuff, but we can at least let the user
+      #                   delete these files locally. See: eventhandler.undeletable.
       attr_accessor :phantom
+      # @return [Boolean] True if a service that should not be deleted remotely.
+      attr_accessor :undeletable
     end
 
     def initialize(api_id=nil)
@@ -459,14 +465,10 @@ module MrMurano
       )
       if event.nil? || item[:event] == '*'
         svc_match
+      elsif service == '*'
+        event == item[:event]
       else
-        # rubocop:disable Style/IfInsideElse
-        #svc_evt == "#{item[:service]}.#{item[:event]}"
-        if service == '*'
-          event == item[:event]
-        else
-          svc_match && event == item[:event]
-        end
+        svc_match && event == item[:event]
       end
     end
 
@@ -548,7 +550,6 @@ module MrMurano
             svc_alias: svc_alias,
           )
         elsif !cur.nil? && !cur[:script].nil?
-          # 2017-07-02: Frozen string literal: change << to +=
           cur[:script] += line
         end
         lineno += 1
@@ -683,29 +684,27 @@ module MrMurano
     end
 
     def resurrect_undeletables(localbox, therebox)
+      localbox = super
       undeletables = ($cfg['eventhandler.undeletable'] || '').split
+      (therebox.keys & localbox.keys).each do |key|
+        # The key exists in both the local project and on the remote.
+        # If the service is an undeletable, the server will have created
+        # the service automatically. If the user has a local file for the
+        # same service, we wouldn't know that the two services differ
+        # except for the timestamps. But under rspec, the server will create
+        # the service at near the same time that the test creates the local
+        # file, so the timestamps might fall within 1 second of each other,
+        # which the CLI would consider the same. So mark undeletables
+        # specially, so that later we can do an explicit dodiff if needed.
+        localitem = localbox[key]
+        next unless undeletable?(localitem, undeletables)
+        localitem.undeletable = true
+      end
       (therebox.keys - localbox.keys).each do |key|
-        # key exists in therebox but not localbox.
+        # The key exists in therebox but not localbox.
         thereitem = therebox[key]
         next unless undeletable?(thereitem, undeletables)
-        debug "Undeletable: #{key}"
-        undeletable = EventHandlerItem.new(thereitem)
-        undeletable.id = nil
-        undeletable.created_at = nil
-        undeletable.updated_at = nil
-        #undeletable.local_path
-        #undeletable.line
-        # Even if the user deletes the contents of a script,
-        # the platform still sends the magic header.
-        #undeletable.script = ''
-        undeletable.script = (
-          "--#EVENT #{therebox[key].service} #{therebox[key].event}\n"
-        )
-        undeletable.local_path = Pathname.new(
-          File.join(location, tolocalname(thereitem, key))
-        )
-        undeletable.phantom = true
-        localbox[key] = undeletable
+        resurrect_undeletable(key, localbox, therebox, thereitem)
       end
       localbox
     end
@@ -715,6 +714,25 @@ module MrMurano
       undeletables.any? do |svc_evt|
         cmp_svc_evt(item, svc_evt)
       end
+    end
+
+    def resurrect_undeletable(key, localbox, therebox, thereitem)
+      debug "Undeletable: #{key}"
+      undeletable = EventHandlerItem.new(thereitem)
+      undeletable.id = nil
+      undeletable.created_at = nil
+      undeletable.updated_at = nil
+      # Even if the user deletes the contents of a script,
+      # the platform still sends the magic header.
+      undeletable.script = (
+        "--#EVENT #{therebox[key].service} #{therebox[key].event}\n"
+      )
+      undeletable.local_path = Pathname.new(
+        File.join(location, tolocalname(thereitem, key))
+      )
+      undeletable.phantom = true
+      undeletable.undeletable = true
+      localbox[key] = undeletable
     end
   end
 

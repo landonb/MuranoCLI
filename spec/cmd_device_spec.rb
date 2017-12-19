@@ -92,7 +92,7 @@ RSpec.describe 'murano device', :cmd, :needs_password do
     )
 
     out, err, status = Open3.capture3(capcmd('murano', 'syncup', '--resources'))
-    expect(out).to eq("Adding item state\nAdding item temperature\nAdding item uptime\nAdding item humidity\nUpdating product resources\n")
+    expect(out).to eq("Adding item state\nAdding item temperature\nAdding item uptime\nAdding item humidity\nUpdating remote product resources\n")
     expect(err).to eq('')
     expect(status.exitstatus).to eq(0)
 

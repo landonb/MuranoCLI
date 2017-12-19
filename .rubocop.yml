@@ -144,6 +144,8 @@ Naming/FileName:
     - 'lib/MrMurano/SyncAllowed.rb'
     - 'lib/MrMurano/SyncRoot.rb'
     - 'lib/MrMurano/SyncUpDown.rb'
+    - 'lib/MrMurano/SyncUpDown-Core.rb'
+    - 'lib/MrMurano/SyncUpDown-Item.rb'
     - 'lib/MrMurano/Webservice-Cors.rb'
     - 'lib/MrMurano/Webservice-Endpoint.rb'
     - 'lib/MrMurano/Webservice-File.rb'

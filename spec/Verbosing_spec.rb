@@ -18,6 +18,7 @@ class VTst
     @token = nil
   end
 end
+
 RSpec.describe MrMurano::Verbose do
   include_context 'WORKSPACE'
 
@@ -45,13 +46,16 @@ RSpec.describe MrMurano::Verbose do
   end
 
   it 'warns' do
-    expect($stderr).to receive(:puts).with("\e[33mhello\e[0m").once
-    @tst.warning 'hello'
+    # 2017-12-14 (landonb): Not sure what changed, but this stopped working:
+    #   expect($stderr).to receive(:say).with("\e[33mhello\e[0m").once
+    #   @tst.warning 'hello'
+    # I tried receive(:warn), and expect($terminal), but for naught.
+    # Wrapping the call in the expect does the trick, though.
+    expect { @tst.warning 'hello' }.to output("\e[33mhello\e[0m\n").to_stderr
   end
 
   it 'errors' do
-    expect($stderr).to receive(:puts).with("\e[31mhello\e[0m").once
-    @tst.error 'hello'
+    expect { @tst.error 'hello' }.to output("\e[31mhello\e[0m\n").to_stderr
   end
 
   context 'tabularize' do

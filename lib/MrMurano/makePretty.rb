@@ -20,7 +20,7 @@ module MrMurano
     HighLine.color_scheme = PRETTIES_COLORSCHEME
 
     # rubocop:disable Style/MethodName: "Use snake_case for method names."
-    def self.makeJsonPretty(data, options, indent: '', object_nl: '')
+    def self.makeJsonPretty(data, options, indent: nil, object_nl: nil)
       if options.pretty
         ret = JSON.pretty_generate(data, indent: indent, object_nl: object_nl).to_s
         ret[0] = HighLine.color(ret[0], :json)
@@ -31,6 +31,7 @@ module MrMurano
       end
     end
 
+    # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
     def self.MakePrettyLogsV1(line, options)
       # 2017-07-02: Changing shovel operator << to +=
       # to support Ruby 3.0 frozen string literals.
@@ -163,7 +164,7 @@ module MrMurano
           else
             curtime = time_secs_epoch.gmtime
           end
-          curtime = curtime.strftime('%Y-%m-%d %M:%S')
+          curtime = curtime.strftime('%Y-%m-%d %H:%M:%S')
         else
           curtime = line[:timestamp]
         end

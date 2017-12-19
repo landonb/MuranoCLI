@@ -47,8 +47,8 @@ RSpec.describe 'murano single sync', :cmd, :needs_password do
       expect(out_lines).to match_array(
         [
           "Adding item table_util\n",
-          a_string_starting_with('Updating item '),
-          "Updating item user_account\n",
+          "Removing item user_account\n",
+          "Updating item timer_timer\n",
           "Adding item POST_/api/fire\n",
           "Adding item PUT_/api/fire/{code}\n",
           "Adding item DELETE_/api/fire/{code}\n",
@@ -70,9 +70,7 @@ RSpec.describe 'murano single sync', :cmd, :needs_password do
       expect(out_lines).to match_array(
         [
           "Adding item table_util\n",
-          # 2017-08-08: This says updating now because timer.timer is undeletable.
-          #"Adding item timer_timer\n",
-          "Updating item timer_timer\n",
+          "Adding item timer_timer\n",
           "Adding item POST_/api/fire\n",
           "Adding item DELETE_/api/fire/{code}\n",
           "Adding item PUT_/api/fire/{code}\n",

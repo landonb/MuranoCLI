@@ -15,6 +15,9 @@ require 'MrMurano/Logs'
 require 'MrMurano/ReCommander'
 require 'MrMurano/Solution'
 
+# FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
+LOGS_USE_HTTP = true
+
 def command_logs(c)
   cmd_add_logs_meta(c)
   # Add global solution flag: --type [application|product].
@@ -29,7 +32,11 @@ end
 def cmd_add_logs_meta(c)
   c.syntax = %(murano logs [--options])
   c.summary = %(Get the logs for a solution)
-  cmd_add_logs_help(c)
+  if LOGS_USE_HTTP
+    c.description = %(Get the logs for a solution.)
+  else
+    cmd_add_logs_help(c)
+  end
 end
 
 def cmd_add_logs_help(c)
@@ -92,13 +99,13 @@ end
 
 def cmd_add_logs_options(c)
   c.option '-f', '--follow', %(Follow logs from server)
-  c.option '-r', '--retry', %(Always retry the connection)
+  c.option '-r', '--retry', %(Always retry the connection) unless LOGS_USE_HTTP
   c.option '--[no-]localtime', %(Adjust Timestamps to be in local time)
   c.option '--[no-]pretty', %(Reformat JSON blobs in logs.)
   c.option '--raw', %(Don't do any formating of the log data)
+  return if LOGS_USE_HTTP
   c.option '--tracking', %(Include start of the Murano Tracking ID)
   c.option '--tracking-full', %(Include the full Murano Tracking ID)
-
   c.option '--http', %(Use HTTP connection [deprecated; will be removed])
 end
 
@@ -156,14 +163,14 @@ def logs_once(sol, options)
 end
 
 def logs_follow(sol, options)
-  if !options.http
+  if !LOGS_USE_HTTP && !options.http
     logs_follow_wss(sol, options)
   else
     logs_follow_http(sol, options)
   end
 end
 
-# FIXME: (landonb): Delete this after checking in once.
+# FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
 def logs_follow_http(sol, options)
   # Open a lasting connection and continually feed MakePrettyLogsV1().
   sol.get('/logs?polling=true') do |request, http|

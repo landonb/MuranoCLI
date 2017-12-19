@@ -181,6 +181,7 @@ module MrMurano
               nil
             else
               showHttpError(request, response)
+              nil
             end
           end
 
