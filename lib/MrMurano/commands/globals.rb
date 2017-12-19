@@ -88,3 +88,7 @@ global_option('--debug', %(Show debug messages)) do
   $cfg['tool.debug'] = true
 end
 
+global_option('--sid VALUE', %(Override application or product ID)) do |value|
+  $cfg['application.id'] = value
+  $cfg['product.id'] = value
+end
