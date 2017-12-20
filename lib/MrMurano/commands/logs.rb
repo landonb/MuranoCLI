@@ -16,7 +16,7 @@ require 'MrMurano/ReCommander'
 require 'MrMurano/Solution'
 
 # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
-LOGS_USE_HTTP = true
+LOGS_USE_HTTP = false
 
 def command_logs(c)
   cmd_add_logs_meta(c)
