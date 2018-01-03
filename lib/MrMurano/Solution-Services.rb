@@ -228,7 +228,18 @@ module MrMurano
       return nil unless cache_file.file?
       ret = nil
       cache_file.open('r') do |io|
-        cache = YAML.load(io)
+        begin
+          cache = YAML.load(io)
+# FIXME: Test this.
+        rescue StandardError => err
+          # This should be Psych::SyntaxError but let's catch 'em all.
+          # (lb): We could suggest to the user that they delete the
+          #  cache file, but I'd rather understand what's going on.
+          #  If anything, the user seeing this error should send us
+          #  a copy of their cache files.
+          warning("ERROR: Could not the cache file at: #{cache_file}")
+          warning(err.to_s)
+        end
         return nil unless cache
         if cache.key?(local_path.to_s)
           entry = cache[local_path.to_s]
