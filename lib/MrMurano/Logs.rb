@@ -1,4 +1,4 @@
-# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -39,10 +39,10 @@ module MrMurano
         uri += %(?token=#{sol.token})
         uri += %(&query=#{@query})
         # MAYBE: (landonb): Add projection options? (Use for tracking exclusion.)
-        #  uri += %(&projection={})
-        # MAYBE: (landonb): Add limit option? (I think this is number of
-        #   already-recorded log events to fetch and stream.)
-        #  uri += %(&limit=20)
+        #   uri += %(&projection={})
+        # MAYBE: (landonb): Add limit option? This is number
+        #  of old log events to fetch first before streaming.
+        #   uri += %(&limit=20)
         uri
       end
 
