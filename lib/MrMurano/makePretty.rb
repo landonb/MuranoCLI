@@ -31,6 +31,7 @@ module MrMurano
       end
     end
 
+    # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
     def self.MakePrettyLogsV1(line, options)
       # 2017-07-02: Changing shovel operator << to +=
       # to support Ruby 3.0 frozen string literals.
@@ -180,12 +181,15 @@ module MrMurano
     end
 
     def self.log_pretty_header_add_a_service_event(line, out, raw, _options)
+      pad = '    '
+      out += pad
+      raw += pad
       svc_evt = []
       svc_evt += [line[:service]] unless line[:service].to_s.empty?
       svc_evt += [line[:event]] unless line[:event].to_s.empty?
       svc_evt = "[#{svc_evt.join(' ').upcase}]"
       out += HighLine.color(svc_evt, :subject)
-      raw += svc_evt
+      raw + svc_evt
       [out, raw]
     end
 
