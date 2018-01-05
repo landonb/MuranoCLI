@@ -38,6 +38,10 @@ module MrMurano
         ].join('/')
         uri += %(?token=#{sol.token})
         uri += %(&query=#{@query})
+# FIXME: Keep testing different types until 1 works, then complain.
+# oh, wait, nm, I think queries just take a while...
+#        uri += %(&query={"type":"Script"})
+#        uri += %(&query={"type":"Event"})
         # FIXME: (landonb): Add projection options?
         #  uri += %(&projection={})
         # FIXME: (landonb): Add limit option? (I think this is number of

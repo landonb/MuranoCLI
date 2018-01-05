@@ -321,7 +321,7 @@ class LogsCmd
       end
     end
 #    query_parts.push %(severity: { $in: [ #{indices.map{ |x| %("#{x}")}.join(',')} ] })
-    query_parts['severity'] = { '$in': [ indices ] }
+    query_parts['severity'] = { '$in': indices }
   end
 
   def assemble_query_types_array(query_parts)
@@ -359,7 +359,13 @@ class LogsCmd
   def assemble_string_search_one(query_parts, field, value)
     return if value.to_s.empty?
 #    query_parts.push %(#{field}: { $text: { $search: "#{value}" } })
-    query_parts[field] = { '$text': { '$search': value } }
+#    query_parts[field] = { '$text': { '$search': value } }
+#    query_parts[field] = { '$regex': "/#{value}/i" }
+#    query_parts[field] = { '$regex': "/#{value}/" }
+    query_parts[field] = { '$regex': "/.*#{value}.*/" }
+#    query_parts[field] = { '$regex': /#{value}/i }
+# this worked for --message YAS!
+#    query_parts[field] = { '$eq': value }
   end
 
   def assemble_string_search_many(query_parts, field, arr_of_arrs)
@@ -388,7 +394,7 @@ class LogsCmd
 #    query_parts.push(
 #      %(#{field}: { #{operator}: [ #{resolved_terms.map{ |x| %("#{x}") }.join(',')} ] })
 #    )
-    query_parts[field] = { "#{operator}": [ resolved_terms ] }
+    query_parts[field] = { "#{operator}": resolved_terms }
   end
 
   def term_indicates_exclude?(term)
