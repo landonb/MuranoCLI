@@ -1,4 +1,4 @@
-# Copyright © 2017 Exosite LLC. All Rights Reserved
+# Copyright © 2017-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -31,15 +31,6 @@ RSpec.describe 'murano logs', :cmd, :needs_password do
 
     @acc = MrMurano::Account.instance
     allow(@acc).to receive(:login_info).and_return(email: 'bob', password: 'v')
-  end
-
-  # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
-  def supports_ws?
-    runner = ::Commander::Runner.instance
-    logs_cmd = runner.command(:logs)
-    logs_cmd.options.any? do |opt|
-      opt[:args].include? '--http'
-    end
   end
 
   def test_tail_log
@@ -155,7 +146,7 @@ message: #{JSON.generate(@blatherer.example_type_config_newservice)}
 
   context 'when project is setup' do
     it 'tail log' do
-      test_tail_log if supports_ws?
+      test_tail_log
     end
   end
 end

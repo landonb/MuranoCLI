@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -92,3 +92,4 @@ global_option('--sid VALUE', %(Override application or product ID)) do |value|
   $cfg['application.id'] = value
   $cfg['product.id'] = value
 end
+

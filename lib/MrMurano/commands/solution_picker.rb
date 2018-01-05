@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -16,7 +16,7 @@ MSG_SOLUTIONS_NONE_FOUND = 'No solutions found' unless defined? MSG_SOLUTIONS_NO
 # ---------------------------------------------------------------------
 
 def cmd_add_solntype_pickers(cmd, exclude_all: false)
-  # 2017-07-26: HA! The --type option can get masked by aliases.
+  # 2017-07-26 (landonb): HA! The --type option can get masked by aliases.
   # For instance, if the option is required ("--type TYPE"), then
   #   murano domain --type product
   # fails, because the "domain product" alias steals the --type argument,

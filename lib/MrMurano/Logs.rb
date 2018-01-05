@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -14,6 +14,10 @@ require 'MrMurano/verbosing'
 module MrMurano
   module Logs
     class Follow
+      def initialize(query)
+        @query = query
+      end
+
       def run_event_loop(sol, &block)
         # block_given?
         @message_handler = block
@@ -33,10 +37,12 @@ module MrMurano
           protocol + ':/', $cfg['net.host'], 'api:1', 'solution', sol.api_id, 'logs',
         ].join('/')
         uri += %(?token=#{sol.token})
-        uri += %(&query={})
-        uri += %(&projection={})
-        # FIXME: (landonb): Would we want to add limit=?
-        #uri += %(&limit=20)
+        uri += %(&query=#{@query})
+        # FIXME: (landonb): Add projection options?
+        #  uri += %(&projection={})
+        # FIXME: (landonb): Add limit option? (I think this is number of
+        #   already-recorded log events to fetch and stream.)
+        #  uri += %(&limit=20)
         uri
       end
 

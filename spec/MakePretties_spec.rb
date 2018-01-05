@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 

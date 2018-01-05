@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -31,7 +31,6 @@ module MrMurano
       end
     end
 
-    # FIXME: (landonb): MUR-3081: Remove old http code for v3.1.0. Search: LOGS_USE_HTTP.
     def self.MakePrettyLogsV1(line, options)
       # 2017-07-02: Changing shovel operator << to +=
       # to support Ruby 3.0 frozen string literals.

@@ -1,4 +1,4 @@
-# Copyright © 2016-2017 Exosite LLC. All Rights Reserved
+# Copyright © 2016-2018 Exosite LLC. All Rights Reserved
 # License: PROPRIETARY. See LICENSE.txt.
 # frozen_string_literal: true
 
@@ -137,7 +137,7 @@ module MrMurano
     end
 
     # Get the current Project file
-    # @return [Pathname] PAth to current project file.
+    # @return [Pathname] Path to current project file.
     def project_file
       @prj_file
     end
@@ -174,6 +174,9 @@ module MrMurano
         'assets.include' => 'files.searchFor',
         'assets.exclude' => 'files.ignoring',
 
+        # (lb): As far as I can tell, code uses $cfg['files.default_page'],
+        #       and never accesses the $project['assets.default_page'].
+        #       Is this a bug?
         'assets.default_page' => 'files.default_page',
 
         'modules.location' => 'location.modules',
@@ -191,8 +194,6 @@ module MrMurano
         'services.exclude' => 'eventhandler.ignoring',
 
         'resources.location' => 'location.resources',
-        # EXPLAIN/2017-07-05: [lb] not finding either resources.include
-        # nor product.spec used anywhere.
         'resources.include' => 'product.spec',
         'resources.exclude' => 'product.ignoring',
       }.freeze
