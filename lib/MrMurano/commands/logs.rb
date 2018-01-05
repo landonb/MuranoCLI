@@ -281,7 +281,6 @@ class LogsCmd
   end
 
   def assemble_query
-#    query_parts = []
     query_parts = {}
     assemble_query_severity(query_parts)
     assemble_query_types_array(query_parts)
@@ -320,7 +319,6 @@ class LogsCmd
         end
       end
     end
-#    query_parts.push %(severity: { $in: [ #{indices.map{ |x| %("#{x}")}.join(',')} ] })
     query_parts['severity'] = { '$in': indices }
   end
 
@@ -358,14 +356,16 @@ class LogsCmd
 
   def assemble_string_search_one(query_parts, field, value)
     return if value.to_s.empty?
-#    query_parts.push %(#{field}: { $text: { $search: "#{value}" } })
-#    query_parts[field] = { '$text': { '$search': value } }
-#    query_parts[field] = { '$regex': "/#{value}/i" }
-#    query_parts[field] = { '$regex': "/#{value}/" }
-    query_parts[field] = { '$regex': "/.*#{value}.*/" }
-#    query_parts[field] = { '$regex': /#{value}/i }
-# this worked for --message YAS!
-#    query_parts[field] = { '$eq': value }
+    # FIXME (lb): Platform does not seem to support $regex, which
+    # seems like a better choice than strict equality. But for now
+    # we have to do $eq to at least make it sort of work.
+    # Ask platform team how to make this work:
+    #   query_parts[field] = { '$regex': "/#{value}/i" }
+    # I also tried these:
+    #    query_parts[field] = { '$regex': "/#{value}/" }
+    #    query_parts[field] = { '$regex': "/.*#{value}.*/" }
+    # For now, this:
+    query_parts[field] = { '$eq': value }
   end
 
   def assemble_string_search_many(query_parts, field, arr_of_arrs)
