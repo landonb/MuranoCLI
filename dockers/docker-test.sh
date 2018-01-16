@@ -10,6 +10,7 @@ echo "\${MURANO_PASSWORD}: ${MURANO_PASSWORD}"
 echo "\${LANDON_PASSWORD}: ${LANDON_PASSWORD}"
 echo "\${OTHER_PASSWORD}: ${OTHER_PASSWORD}"
 echo "\${WORKSPACE}: ${WORKSPACE}"
+exit 0
 
 if [[ -z ${MURANO_PASSWORD} ]]; then
     >&2 echo "Please set MURANO_PASSWORD."
