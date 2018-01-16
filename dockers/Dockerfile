@@ -15,6 +15,8 @@ RUN ruby -v
 RUN cd /app && gem install bundler && gem install rspec && bundler install && rake build
 
 RUN rspec -v
+RUN whereis rspec
+RUN command -v rspec
 
 RUN ruby -rubygems -e 'puts Gem.dir'
 
@@ -37,7 +39,8 @@ RUN /bin/chmod 2777 /app
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
 
-
+RUN /bin/ls -la /usr/local/bundle
+RUN /bin/ls -la /usr/local/bundle/bin
 
 # install things globally, for great justice
 # https://github.com/docker-library/ruby/issues/53
