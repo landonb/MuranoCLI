@@ -1,7 +1,9 @@
 FROM ruby:2.3.6-jessie
 
+RUN useradd -ms /bin/bash jenkins
+USER jenkins
+
 WORKDIR /app
-#USER jenkins
 COPY . /app
 
 RUN echo XXXX
