@@ -42,9 +42,10 @@ RUN echo "WORKSPACE: ${WORKSPACE}"
 #EXPOSE 3000
 
 #ENTRYPOINT ["/app/bin/third-wish"]
-#RUN cd /app && ./dockers/docker-test.sh
 #ENTRYPOINT ["/app/dockers/docker-test.sh"]
-RUN /app/dockers/docker-test.sh
+#
+#RUN /app/dockers/docker-test.sh
+#RUN cd /app && ./dockers/docker-test.sh
 ENTRYPOINT ["/app/dockers/docker-test.sh"]
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
