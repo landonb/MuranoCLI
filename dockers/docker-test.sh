@@ -33,17 +33,17 @@ cd /app
 echo "ruby -v..."
 ruby -v
 
-echo "gem install bundler..."
-gem install bundler
+#echo "gem install bundler..."
+#gem install bundler
 
-echo "bundler install..."
-bundler install
+#echo "bundler install..."
+#bundler install
 
 # NOTE: `ruby -Ilib bin/murano -v` works now. Not sure why.
 
 echo "rake rebuild..."
 #rake rebuild
-rake build
+#rake build
 
 echo "gem install..."
 ruby -rubygems -e 'puts Gem.dir'
