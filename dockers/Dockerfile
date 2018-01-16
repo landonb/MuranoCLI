@@ -1,8 +1,5 @@
 FROM ruby:2.3.6-jessie
 
-RUN useradd -ms /bin/bash jenkins
-USER jenkins
-
 WORKDIR /app
 COPY . /app
 
@@ -25,6 +22,12 @@ RUN gem install -i \
 	pkg/MuranoCLI-$(ruby -e \
 		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
 	).gem
+
+RUN useradd -ms /bin/bash jenkins
+#USER jenkins
+RUN chown -R jenkins:jenkins /app
+#   sudo find $dest_dir -type d -exec chmod 2775 {} +
+#   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
