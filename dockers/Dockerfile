@@ -30,7 +30,7 @@ RUN echo "MURANO_PASSWORD: ${MURANO_PASSWORD}"
 RUN echo "LANDON_PASSWORD: ${LANDON_PASSWORD}"
 RUN echo "OTHER_PASSWORD: ${OTHER_PASSWORD}"
 RUN echo "WORKSPACE: ${WORKSPACE}"
-
+RUN echo "Hidden! 12345 Is it?"
 
 # Avoid:
 #  /var/lib/gems/2.1.0/gems/rake-11.3.0/lib/rake/file_utils.rb:56:
