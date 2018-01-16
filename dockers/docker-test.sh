@@ -5,6 +5,11 @@ mkdir -p ${WORKSPACE}
 
 export MURANO_CONFIGFILE=${WORKSPACE}/test.run.muranocfg
 
+echo "\${MURANO_USERNAME}: ${MURANO_USERNAME}"
+echo "\${MURANO_PASSWORD}: ${MURANO_PASSWORD}"
+echo "\${LANDON_PASSWORD}: ${LANDON_PASSWORD}"
+echo "\${WORKSPACE}: ${WORKSPACE}"
+
 if [[ -z ${MURANO_PASSWORD} ]]; then
     >&2 echo "Please set MURANO_PASSWORD."
     exit 1
@@ -48,5 +53,5 @@ gem install -i $(ruby -rubygems -e 'puts Gem.dir') pkg/MuranoCLI-$(ruby -e 'requ
 #[ ${GIT_BRANCH} = "origin/feature/windows" ] && export MURANO_PASSWORD=${LANDON_PASSWORD}
 
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
-rake test_clean_up test
+#rake test_clean_up test
 
