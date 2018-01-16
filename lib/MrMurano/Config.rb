@@ -338,6 +338,7 @@ module MrMurano
         root = nil
       end
       return nil if root.nil?
+# MUR-5081. Add debug msg here and other mkpath's.
       root.mkpath
       root + name
     end
