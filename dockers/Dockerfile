@@ -1,8 +1,11 @@
 FROM ruby:2.3.6-jessie
 
 WORKDIR /app
-USER jenkins
+#USER jenkins
 COPY . /app
+
+RUN echo XXXX
+RUN cat /etc/passwd
 
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
