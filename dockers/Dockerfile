@@ -30,7 +30,6 @@ RUN echo "LANDON_PASSWORD: ${LANDON_PASSWORD}"
 RUN echo "OTHER_PASSWORD: ${OTHER_PASSWORD}"
 RUN echo "WORKSPACE: ${WORKSPACE}"
 
-#RUN cd /app && ./dockers/docker-test.sh
 
 # Avoid:
 #  /var/lib/gems/2.1.0/gems/rake-11.3.0/lib/rake/file_utils.rb:56:
@@ -42,7 +41,9 @@ RUN echo "WORKSPACE: ${WORKSPACE}"
 #EXPOSE 3000
 
 #ENTRYPOINT ["/app/bin/third-wish"]
-ENTRYPOINT ["/app/dockers/docker-test.sh"]
+#RUN cd /app && ./dockers/docker-test.sh
+#ENTRYPOINT ["/app/dockers/docker-test.sh"]
+RUN /app/dockers/docker-test.sh
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
