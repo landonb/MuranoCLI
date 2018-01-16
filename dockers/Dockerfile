@@ -18,7 +18,11 @@ RUN /bin/ls -la
 #RUN cd /app && git init
 #RUN cd /app && git submodule init && git submodule update
 
-RUN echo "${WORKSPACE}"
+RUN echo "MURANO_USERNAME: ${MURANO_USERNAME}"
+RUN echo "MURANO_PASSWORD: ${MURANO_PASSWORD}"
+RUN echo "LANDON_PASSWORD: ${LANDON_PASSWORD}"
+RUN echo "WORKSPACE: ${WORKSPACE}"
+
 RUN cd /app && ./dockers/docker-test.sh
 
 # Avoid:
