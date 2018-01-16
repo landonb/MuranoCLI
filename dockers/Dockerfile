@@ -28,7 +28,9 @@ RUN cat /etc/passwd
 ##RUN chown -R jenkins:jenkins /app
 ##   sudo find $dest_dir -type d -exec chmod 2775 {} +
 ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
-#RUN /bin/chmod -R go+w /app
+RUN /bin/chmod -R go+w /app
+RUN /bin/chmod 2755 /app
+
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
