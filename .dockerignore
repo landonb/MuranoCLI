@@ -1,0 +1,9 @@
+.bundle/
+coverage/
+#[".trustme.sh", ".trustme.vim", "docs/basic_example.rst", "docs/completions/murano_completion-bash", "docs/demo.md", "docs/develop.rst"] are not files
+#docs/
+#.git/
+#pkg/
+report/
+#spec/
+#.trustme.*
