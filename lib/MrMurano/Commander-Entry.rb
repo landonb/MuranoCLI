@@ -43,7 +43,7 @@ program :description, %(
 # etc., then do not do progress.
 # TEST/2017-08-23: Does this work on Windows?
 ARGV.push('--no-progress') unless $stdout.tty? || ARGV.include?('--no-progress')
-ARGV.push('--no-color') unless $stdout.tty? || ARGV.include?('--no-color')
+#ARGV.push('--no-color') unless $stdout.tty? || ARGV.include?('--no-color')
 
 default_command :help
 
