@@ -76,6 +76,8 @@ end
 
 desc 'Run RSpec'
 task :rspec do
+  sh %(echo "XXXXX")
+  sh %(pwd)
   Dir.mkdir('report') unless File.directory?('report')
   rv = RUBY_VERSION.tr('.', '_')
   sh %(rspec --format html --out report/index-#{rv}.html --format documentation)
