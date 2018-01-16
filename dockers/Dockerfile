@@ -9,19 +9,20 @@ RUN cat /etc/passwd
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
 
-#RUN ruby -v
+RUN ruby -v
 
 #RUN cd /app && gem install bundler && bundler install && rake build
+RUN cd /app && gem install bundler && gem install rspec && bundler install && rake build
 
-#RUN ruby -rubygems -e 'puts Gem.dir'
+RUN ruby -rubygems -e 'puts Gem.dir'
 
-#RUN ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
+RUN ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
 
-#RUN gem install -i \
-#	$(ruby -rubygems -e 'puts Gem.dir') \
-#	pkg/MuranoCLI-$(ruby -e \
-#		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
-#	).gem
+RUN gem install -i \
+	$(ruby -rubygems -e 'puts Gem.dir') \
+	pkg/MuranoCLI-$(ruby -e \
+		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
+	).gem
 
 ##RUN useradd -ms /bin/bash jenkins
 ##USER jenkins
@@ -30,7 +31,6 @@ RUN cat /etc/passwd
 ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
 RUN /bin/chmod -R go+w /app
 RUN /bin/chmod 2777 /app
-
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
