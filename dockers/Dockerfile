@@ -29,7 +29,7 @@ RUN cat /etc/passwd
 ##   sudo find $dest_dir -type d -exec chmod 2775 {} +
 ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
 RUN /bin/chmod -R go+w /app
-RUN /bin/chmod 2755 /app
+RUN /bin/chmod 2777 /app
 
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
