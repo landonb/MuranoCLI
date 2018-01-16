@@ -34,6 +34,20 @@ RUN echo "OTHER_PASSWORD: ${OTHER_PASSWORD}"
 RUN echo "OTHER_PASSWORD: ${#OTHER_PASSWORD}"
 RUN echo "Hidden! 12345 Is it?"
 
+#Step 14/17 : RUN echo "OTHER_PASSWORD: ${OTHER_PASSWORD}"
+# ---> Running in 090dfcf2a969
+#OTHER_PASSWORD: 
+#Removing intermediate container 090dfcf2a969
+# ---> 60d13478aed7
+#Step 15/17 : RUN echo "OTHER_PASSWORD: ${#OTHER_PASSWORD}"
+# ---> Running in 9199c3000388
+#OTHER_PASSWORD: 0
+#Removing intermediate container 9199c3000388
+# ---> d503ce122904
+#Step 16/17 : RUN echo "Hidden! [*******] Is it?"
+# ---> Running in 2aad94a5c078
+#Hidden! [*******] Is it?
+
 # Avoid:
 #  /var/lib/gems/2.1.0/gems/rake-11.3.0/lib/rake/file_utils.rb:56:
 #   warning: Insecure world writable dir /go/bin in PATH, mode 040777
@@ -47,8 +61,10 @@ RUN echo "Hidden! 12345 Is it?"
 #ENTRYPOINT ["/app/dockers/docker-test.sh"]
 #
 #RUN /app/dockers/docker-test.sh
-#RUN cd /app && ./dockers/docker-test.sh
-ENTRYPOINT ["/app/dockers/docker-test.sh"]
+RUN cd /app && ./dockers/docker-test.sh
+#ENTRYPOINT ["/app/dockers/docker-test.sh"]
+
+# docker exec --tty 9c5ded298ca4be3c6e6395ef97fdd48a8cd3948d5c91a83dff0f111280eb05c1 env
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
