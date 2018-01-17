@@ -44,8 +44,8 @@ RUN /bin/ls -la /usr/local/bundle/bin
 
 RUN chmod 2777 /usr/local/bundle
 RUN chmod 2777 /usr/local/bundle/bin
-sudo find /usr/local/bundle -type d -exec chmod 2775 {} +
-sudo find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+r {} +
+RUN find /usr/local/bundle -type d -exec chmod 2775 {} +
+RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+r {} +
 
 RUN mkdir -p /home/jenkins
 RUN chmod 2777 /home
