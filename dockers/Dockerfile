@@ -72,3 +72,5 @@ RUN bundle config
 #RUN bundle config --global path "$GEM_HOME" \
 #    && bundle config --global bin "$GEM_HOME/bin"
 
+RUN chmod 2777 /app/report
+

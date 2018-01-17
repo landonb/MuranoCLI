@@ -94,3 +94,10 @@ echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 #ruby --external-encoding=UTF-8
 cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
 
+
+echo "ll ${WORKSPACE}"
+/bin/ls -la ${WORKSPACE}
+
+echo "ll /app"
+/bin/ls -la /app
+
