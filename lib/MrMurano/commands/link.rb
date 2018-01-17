@@ -187,6 +187,7 @@ def link_solutions(sol_a, sol_b, options)
       MrMurano::Verbose.whirly_stop
       if response.is_a?(Net::HTTPSuccess)
 #say("XXXXX")
+$stderr.print("============== __ENCODING__: #{__ENCODING__}\n")
 $stderr.print("XXXXX\n")
 $stderr.print("Bad???: ‘XXXXX’\n")
 $stderr.print("sol_a.quoted_name: #{sol_a.quoted_name}\n")
