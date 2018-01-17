@@ -58,6 +58,10 @@ RUN echo "sudoers/2"
 #
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 #
+RUN echo "Runas_Alias ROOTY = #1001" >> /etc/sudoers
+RUN echo "ROOTY	ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "ROOTY	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+#
 # User privilege specification
 RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
