@@ -40,8 +40,8 @@ RUN /bin/chmod 2777 /app
 
 RUN chmod 2777 /usr/local/bundle
 RUN chmod 2777 /usr/local/bundle/bin
-RUN find /usr/local/bundle -type d -exec chmod 2775 {} +
-RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+r {} +
+RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
+RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
 RUN /bin/ls -la /usr/local/bundle
 RUN /bin/ls -la /usr/local/bundle/bin
 
