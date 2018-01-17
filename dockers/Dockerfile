@@ -11,6 +11,10 @@ USER root
 # properly, and otherwise the Docker user cannot do much.
 # Give the unborn jenkins user sudo priveleges.
 
+# NOTE: For completeness, we could run upgrade, but that adds time to the build.
+#   RUN apt-get upgrade -y
+#   #RUN apt-get dist-upgrade -y
+
 RUN \
   echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
     >> /etc/apt/sources.list \
@@ -19,9 +23,6 @@ RUN \
   && apt-get -qq update \
   && apt-get install -y sudo
 
-# For completeness, we could run upgrade, but that adds time to the build.
-#RUN apt-get upgrade -y
-##RUN apt-get dist-upgrade -y
 
 #RUN apt-get install -y sudo
 
@@ -34,7 +35,7 @@ RUN \
 #RUN echo "%root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #
 #???
-RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 
 

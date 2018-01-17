@@ -123,7 +123,7 @@ ruby -Ilib bin/murano solutions expunge -y --no-progress --no-color --ascii
 #XXX cd /app
 #XXX RVERS=$(ruby -rubygems -e "puts RUBY_VERSION.tr('.', '_')")
 PATH=${PATH}:/usr/local/bundle/bin
-echo "PATH: ${PATH}"
+#XXX echo "PATH: ${PATH}"
 #XXX /bin/ls -la
 
 
