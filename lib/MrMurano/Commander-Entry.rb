@@ -43,7 +43,8 @@ program :description, %(
 # etc., then do not do progress.
 # TEST/2017-08-23: Does this work on Windows?
 ARGV.push('--no-progress') unless $stdout.tty? || ARGV.include?('--no-progress')
-#jARGV.push('--no-color') unless $stdout.tty? || ARGV.include?('--no-color')
+#ARGV.push('--no-color') unless $stdout.tty? || ARGV.include?('--no-color')
+ARGV.push('--ascii') unless ''.encode("UTF-8").encoding == __ENCODING__
 
 default_command :help
 
