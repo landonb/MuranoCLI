@@ -22,8 +22,12 @@ RUN ruby -rubygems -e 'puts Gem.dir'
 
 RUN ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
 
-RUN gem install -i \
-	$(ruby -rubygems -e 'puts Gem.dir') \
+#RUN gem install -i \
+#	$(ruby -rubygems -e 'puts Gem.dir') \
+#	pkg/MuranoCLI-$(ruby -e \
+#		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
+#	).gem
+RUN gem install \
 	pkg/MuranoCLI-$(ruby -e \
 		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
 	).gem

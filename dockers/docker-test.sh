@@ -4,6 +4,10 @@ echo "whoami: $(whoami)"
 echo "USER: ${USER}"
 #chown -R jenkins /app
 
+echo "\${LANG}: ${LANG}"
+echo "\${LANGUAGE}: ${LANGUAGE}"
+echo "\${LC_ALL}: ${LC_ALL}"
+
 export MURANO_USERNAME="${LANDON_USERNAME}"
 export MURANO_PASSWORD="${LANDON_PASSWORD}"
 echo "\${MURANO_USERNAME}: ${MURANO_USERNAME}"
