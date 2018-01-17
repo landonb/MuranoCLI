@@ -77,6 +77,7 @@ RSpec.describe 'murano link', :cmd, :needs_password do
       olines = out.lines
 puts "olines: #{olines}"
 puts "err: #{err}"
+puts "BAD?: ‘XXXXX’"
       expect(strip_fancy(olines[0])).to eq(
         "Linked '#{@proj_name_prod}' to '#{@proj_name_appy}'\n"
       )

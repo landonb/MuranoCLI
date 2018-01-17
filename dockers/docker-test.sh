@@ -73,6 +73,7 @@ rake test_clean_up -t
 echo "RAKE2!"
 #rake test -t
 echo "XXXXX"
+echo "Bad????: ‘murclitestprod3cdb49e09c74aab7’"
 pwd
 mkdir -p /app/report
 cd /app

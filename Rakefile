@@ -77,7 +77,7 @@ end
 desc 'Run RSpec'
 task :rspec do
   sh %(echo "XXXXX")
-  sh %(echo "‘murclitestprod3cdb49e09c74aab7’")
+  sh %(echo "Bad??: ‘murclitestprod3cdb49e09c74aab7’")
   sh %(pwd)
   Dir.mkdir('report') unless File.directory?('report')
   rv = RUBY_VERSION.tr('.', '_')
