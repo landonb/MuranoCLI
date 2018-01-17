@@ -111,6 +111,10 @@ RUN gem install \
 
 # ????
 RUN useradd -m -s /bin/bash --uid 1001 jenkins
+RUN /bin/ls -la /home
+RUN mkdir -p /home/jenkins
+RUN chmod 2777 /home
+RUN chmod 2777 /home/jenkins
 
 
 ##USER jenkins
@@ -122,12 +126,14 @@ RUN /bin/chmod 2777 /app
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
+RUN /bin/ls -la /usr/local/bundle
+RUN /bin/ls -la /usr/local/bundle/bin
 RUN chmod 2777 /usr/local/bundle
 RUN chmod 2777 /usr/local/bundle/bin
 RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
 RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
-RUN /bin/ls -la /usr/local/bundle
-RUN /bin/ls -la /usr/local/bundle/bin
+#RUN /bin/ls -la /usr/local/bundle
+#RUN /bin/ls -la /usr/local/bundle/bin
 
 RUN mkdir -p /home/jenkins
 RUN chmod 2777 /home
