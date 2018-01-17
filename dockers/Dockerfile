@@ -143,7 +143,7 @@ RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 #XXX ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
 # FIXME: STILL NECESSARY?:
 #RUN /bin/chmod -R go+w /app
-RUN /bin/chmod 2777 /app
+#RUN /bin/chmod 2777 /app
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
