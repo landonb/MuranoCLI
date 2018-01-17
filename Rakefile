@@ -81,7 +81,7 @@ task :rspec do
   sh %(pwd)
   Dir.mkdir('report') unless File.directory?('report')
   rv = RUBY_VERSION.tr('.', '_')
-  sh %(rspec --format html --out report/index-#{rv}.html --format documentation)
+  sh %(LANG=en_US.UTF-8 rspec --format html --out report/index-#{rv}.html --format documentation)
 end
 task test: %i[test_clean_up rspec]
 
