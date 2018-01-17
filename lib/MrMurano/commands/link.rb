@@ -191,7 +191,7 @@ $stderr.print("XXXXX\n")
 $stderr.print("Bad???: ‘XXXXX’\n")
 $stderr.print("sol_a.quoted_name: #{sol_a.quoted_name}\n")
 $stderr.print("sol_b.quoted_name: #{sol_b.quoted_name}\n")
-        say("Linked #{sol_b.quoted_name} to #{sol_a.quoted_name}")
+        say2("Linked #{sol_b.quoted_name} to #{sol_a.quoted_name}")
       elsif response.is_a?(Net::HTTPConflict)
         svc_cfg_exists = true
       else
@@ -247,6 +247,41 @@ $stderr.print("sol_b.quoted_name: #{sol_b.quoted_name}\n")
   end
   puts '' if verbose
 end
+
+
+
+def say2 statement
+require 'byebug' ; byebug if true
+
+  statement = String(statement || "").dup
+  $stderr.print("statement/1: #{statement}")
+  return statement unless statement.length > 0
+
+  template  = ERB.new(statement, nil, "%")
+  $stderr.print("template: #{template}")
+  statement = template.result(binding)
+  $stderr.print("statement/2: #{statement}")
+
+  statement = wrap(statement) unless @wrap_at.nil?
+  $stderr.print("statement/3: #{statement}")
+  statement = page_print(statement) unless @page_at.nil?
+  $stderr.print("statement/4: #{statement}")
+
+  # 'statement' is encoded in US-ASCII when using ruby 1.9.3(-p551)
+  # 'indentation' is correctly encoded (same as default_external encoding)
+  $stderr.print("Encoding.default_external: #{Encoding.default_external}")
+# #<Encoding:UTF-8>
+  statement = statement.force_encoding(Encoding.default_external)
+  $stderr.print("statement/5: #{statement}")
+
+  $stderr.print("indentation: #{indentation}")
+  $stderr.print("@multi_indent: #{@multi_indent}")
+  statement = statement.gsub(/\n(?!$)/,"\n#{indentation}") if @multi_indent
+
+  statement
+end
+
+
 
 def unlink_solutions(sol_a, sol_b)
   sercfg = MrMurano::ServiceConfig.new(sol_a.api_id)
