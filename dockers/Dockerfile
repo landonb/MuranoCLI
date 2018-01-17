@@ -19,28 +19,25 @@ RUN cat /etc/apt/sources.list
 RUN /bin/ls -la /etc/apt/sources.list.d/
 
 
+# FIXME/TEST THESE AGAIN!:
+#RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
+#RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 
-#RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
-RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
-#deb http://ftp.us.debian.org/debian/ jessie main contrib non-free
-#deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free
-
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" > /etc/apt/sources.list
-#
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" > /etc/apt/sources.list
-#
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" > /etc/apt/sources.list
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" > /etc/apt/sources.list
-#
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" > /etc/apt/sources.list
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" > /etc/apt/sources.list
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
+##
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
+##
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
+##
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
+#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
+#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
 
 
 
