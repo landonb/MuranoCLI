@@ -51,6 +51,8 @@ echo "GEM_DIR: $(ruby -rubygems -e 'puts Gem.dir')"
 
 ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
 
+#ERROR:  While executing gem ... (Errno::EACCES)
+#    Permission denied @ rb_sysopen - /usr/local/bundle/gems/MuranoCLI-3.1.0.beta.3/.dockerignore
 gem install -i \
 	$(ruby -rubygems -e 'puts Gem.dir') \
 	pkg/MuranoCLI-$(ruby -e \
