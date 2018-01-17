@@ -3,6 +3,11 @@
 echo "whoami: $(whoami)"
 echo "USER: ${USER}"
 #chown -R jenkins /app
+echo "users: $(users)"
+echo "groups: $(groups)"
+
+echo "/etc/passwd: $(cat /etc/passwd)"
+echo "/etc/sudoers: $(cat /etc/sudoers)"
 
 echo "\${LANG}: ${LANG}"
 echo "\${LANGUAGE}: ${LANGUAGE}"
@@ -77,12 +82,19 @@ echo "RAKE2!"
 echo "XXXXX"
 echo "Bad????: ‘murclitestprod3cdb49e09c74aab7’"
 pwd
-mkdir -p /app/report
+#mkdir -p /app/report
 cd /app
 RVERS=$(ruby -rubygems -e "puts RUBY_VERSION.tr('.', '_')")
 PATH=${PATH}:/usr/local/bundle/bin
 echo "PATH: ${PATH}"
 /bin/ls -la
+
+
+echo "SUDO"
+su root -c "chmod 2777 /app/report"
+echo "SUDONT"
+
+
 
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 
@@ -92,12 +104,21 @@ echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 #LC_ALL=en_US.UTF-8
 #LC_ALL=en_US.UTF-8
 #ruby --external-encoding=UTF-8
-cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
+cd /app && rspec --format html --out /app/report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
 
+#ERROR: Directory '/tmp/jenkins-ff750fb5/workspace/MuranoCLI/MrMurano Tests/report' exists but failed copying to '/var/lib/jenkins/jobs/MuranoCLI/jobs/MrMurano Tests/htmlreports/RSpec_Report'.
+#ERROR: This is especially strange since your build otherwise succeeded.
 
 echo "ll ${WORKSPACE}"
-/bin/ls -la ${WORKSPACE}
+/bin/ls -la "${WORKSPACE}"
+echo "ll ${WORKSPACE}/report"
+/bin/ls -la "${WORKSPACE}/report"
+chmod 2777 "${WORKSPACE}/report"
+echo "SUDO POWER"
+sudo chmod 2777 "${WORKSPACE}/report"
 
 echo "ll /app"
 /bin/ls -la /app
+echo "ll /app/report"
+/bin/ls -la /app/report
 

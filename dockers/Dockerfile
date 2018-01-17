@@ -1,5 +1,7 @@
 FROM ruby:2.3.6-jessie
 
+USER root
+
 WORKDIR /app
 COPY . /app
 
@@ -8,6 +10,15 @@ RUN cat /etc/passwd
 
 #RUN apt-get -qq update
 #RUN apt-get upgrade -y
+
+RUN apt-get install -y sudo
+
+RUN echo "sudoers/1"
+RUN cat /etc/sudoers
+RUN echo "sudoers/2"
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN cat /etc/sudoers
+
 
 #RUN apt-get install -y language-pack-en
 ENV LANGUAGE en_US.UTF-8
@@ -72,6 +83,6 @@ RUN bundle config
 #RUN bundle config --global path "$GEM_HOME" \
 #    && bundle config --global bin "$GEM_HOME/bin"
 
-RUN mkdir -p /app/report
-RUN chmod 2777 /app/report
+#RUN mkdir -p /app/report
+#RUN chmod 2777 /app/report
 
