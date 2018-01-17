@@ -186,7 +186,10 @@ def link_solutions(sol_a, sol_b, options)
       response = http.request(request)
       MrMurano::Verbose.whirly_stop
       if response.is_a?(Net::HTTPSuccess)
-say("XXXXX")
+#say("XXXXX")
+$stderr.print("XXXXX")
+$stderr.print("sol_b.quoted_name: #{sol_b.quoted_name}")
+$stderr.print("sol_a.quoted_name: #{sol_a.quoted_name}")
         say("Linked #{sol_b.quoted_name} to #{sol_a.quoted_name}")
       elsif response.is_a?(Net::HTTPConflict)
         svc_cfg_exists = true
