@@ -94,6 +94,7 @@ echo "SUDO"
 #su root -c "chmod 2777 /app/report"
 #sudo: unknown uid 1001: who are you?
 sudo chmod 2777 /app/report
+#sudo chmod 2777 /app/coverage
 echo "SUDONT"
 
 
@@ -115,9 +116,11 @@ echo "ll ${WORKSPACE}"
 /bin/ls -la "${WORKSPACE}"
 echo "ll ${WORKSPACE}/report"
 /bin/ls -la "${WORKSPACE}/report"
-chmod 2777 "${WORKSPACE}/report"
-echo "SUDO POWER"
+#chmod 2777 "${WORKSPACE}/report"
+#chmod 2777 "${WORKSPACE}/coverage"
+#echo "SUDO POWER"
 sudo chmod 2777 "${WORKSPACE}/report"
+sudo chmod 2777 "${WORKSPACE}/coverage"
 
 echo "ll /app"
 /bin/ls -la /app
