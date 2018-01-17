@@ -75,9 +75,9 @@ RSpec.describe 'murano link', :cmd, :needs_password do
       out, err, status = Open3.capture3(capcmd('murano', 'assign', 'set'))
       #expect(out).to a_string_starting_with("Linked product #{@solz_name}")
       olines = out.lines
-puts "olines: #{olines}"
-puts "err: #{err}"
-puts "BAD?: ‘XXXXX’"
+#puts "olines: #{olines}"
+#puts "err: #{err}"
+#puts "BAD?: ‘XXXXX’"
       expect(strip_fancy(olines[0])).to eq(
         "Linked '#{@proj_name_prod}' to '#{@proj_name_appy}'\n"
       )
