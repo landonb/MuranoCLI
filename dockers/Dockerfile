@@ -1,5 +1,5 @@
-#FROM ruby:2.3.6-jessie
-FROM ruby:2.3.6-alpine3.4
+FROM ruby:2.3.6-jessie
+#FROM ruby:2.3.6-alpine3.4
 
 USER root
 
