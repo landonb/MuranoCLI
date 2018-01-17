@@ -8,7 +8,7 @@
 #   sudo: unknown uid 1001: who are you?
 #   $ sudo whoami
 #   whoami: cannot find name for user ID 1001
-#   whoami: 
+#   whoami:
 #   $ echo ${USER}
 #   jenkins
 #   $ users
@@ -98,7 +98,7 @@ cd /app
 
 #ERROR:  While executing gem ... (Errno::EACCES)
 #    Permission denied @ rb_sysopen - /usr/local/bundle/gems/MuranoCLI-3.1.0.beta.3/.dockerignore
-# 
+#
 #gem install -i \
 #	$(ruby -rubygems -e 'puts Gem.dir') \
 #	pkg/MuranoCLI-$(ruby -e \

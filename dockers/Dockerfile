@@ -16,7 +16,7 @@ RUN \
     >> /etc/apt/sources.list \
   && echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
     >> /etc/apt/sources.list \
-  && apt-get -qq update
+  && apt-get -qq update \
   && apt-get install -y sudo
 
 # For completeness, we could run upgrade, but that adds time to the build.
@@ -53,7 +53,7 @@ RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 #         setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
 #
 # ALSO: Skip LC_ALL, otherwise when Jenkins runs `docker exec ...` you'd see:
-# 
+#
 #   /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
 #
 # So skipping:
@@ -78,7 +78,7 @@ ENV LANG en_US.UTF-8
 
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 
-# Create the /app directory and give ownership to the new user, otherwise 
+# Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.
 
 RUN mkdir /app && /bin/chown -R jenkins /app
@@ -121,7 +121,7 @@ RUN gem install \
 		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
 	).gem
 # If you're curious about GEM_HOME, et al, try:
-# 
+#
 #   RUN bundle config
 
 
