@@ -112,7 +112,8 @@ RUN gem install \
 # we'd have to do the hideous, grotesque act of granting permissions to all:
 #    RUN /bin/chmod -R go+w /app
 #    RUN /bin/chmod 2777 /app
-RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
+# WHERE IT WAS ORIGINALLY
+#RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 #RUN /bin/chmod -R go+w /app
 #RUN /bin/chmod 2777 /app
 
