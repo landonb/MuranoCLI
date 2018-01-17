@@ -1,21 +1,10 @@
 FROM ruby:2.3.6-jessie
-#XXX ##FROM ruby:2.3.6-alpine3.4
-#XXX #FROM ubuntu:16.04
 
 # This is already a given, but just to be clear:
 USER root
 
 WORKDIR /app
 COPY . /app
-
-#XXX #RUN echo XXXX
-#XXX #RUN cat /etc/passwd
-
-#XXX #RUN /bin/ls -la /etc/apt/
-#XXX #RUN echo "sources.list/1"
-#XXX #RUN cat /etc/apt/sources.list
-#XXX #RUN /bin/ls -la /etc/apt/sources.list.d/
-
 
 # This is a little hack so the Build step Execute Shell command
 # can do as it pleases. Because Jenkins isn't quite configured
@@ -24,47 +13,14 @@ COPY . /app
 
 RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
-
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
-#XXX ##
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
-#XXX ##
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
-#XXX ##
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
-#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
-#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
-
-#XXX #RUN echo "sources.list/2"
-#XXX #RUN cat /etc/apt/sources.list
-
 RUN apt-get -qq update
+
 # For completeness, we could run upgrade, but that adds time to the build.
 #RUN apt-get upgrade -y
 ##RUN apt-get dist-upgrade -y
 
 RUN apt-get install -y sudo
 
-
-
-
-#XXX #RUN echo "sudoers/1"
-#XXX #RUN cat /etc/sudoers
-#XXX #RUN echo "sudoers/2"
-#XXX #
-#XXX #RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
-#XXX ##
-#XXX #RUN echo "Runas_Alias ROOTY = #1001" >> /etc/sudoers
-#XXX #RUN echo "ROOTY	ALL=NOPASSWD: ALL" >> /etc/sudoers
-#XXX #RUN echo "ROOTY	ALL=(ALL:ALL) ALL" >> /etc/sudoers
-#XXX ##
-#XXX ## User privilege specification
 #RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
 ## Members of the admin group may gain root privileges
@@ -74,9 +30,10 @@ RUN apt-get install -y sudo
 #RUN echo "%root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #
 #???
-RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#XXX #
-#XXX RUN cat /etc/sudoers
+#RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+
+
 
 # Jenkins defaults to the ASCII encoding, but we want UTF-8.
 # FIXME/MEH: (lb): Murano CLI still has encoding issues, e.g.,
@@ -128,24 +85,12 @@ RUN gem install \
 # Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
 # but Docker is confused unless we create that user now and assign it the
 # UID that gets used. ((lb): This is hacky; Ops might fix this eventually.)
-# ????
-#XXX #RUN useradd -m -s /bin/bash --uid 1001 jenkins
+# Without adding the user to the root group and having them run as such,
+# we'd have to do the hideous, grotesque act of granting permissions to all:
+#    RUN /bin/chmod -R go+w /app
+#    RUN /bin/chmod 2777 /app
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
-#XXX #RUN /bin/ls -la /home
-#XXX #RUN mkdir -p /home/jenkins
-#XXX #RUN chmod 2777 /home
-#XXX #RUN chmod 2777 /home/jenkins
 
-
-#XXX ##USER jenkins
-#XXX ##RUN chown -R jenkins:jenkins /app
-#XXX ##   sudo find $dest_dir -type d -exec chmod 2775 {} +
-#XXX ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
-# FIXME: STILL NECESSARY?:
-#RUN /bin/chmod -R go+w /app
-#RUN /bin/chmod 2777 /app
-
-# vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
 #XXX RUN /bin/ls -la /usr/local/bundle
 #XXX RUN /bin/ls -la /usr/local/bundle/bin
@@ -172,4 +117,6 @@ RUN chmod 2777 /home/jenkins
 
 #XXX #RUN mkdir -p /app/report
 #XXX #RUN chmod 2777 /app/report
+
+# vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
