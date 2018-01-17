@@ -258,28 +258,29 @@ require 'byebug' ; byebug if true
   return statement unless statement.length > 0
 
   template  = ERB.new(statement, nil, "%")
-  $stderr.print("template: #{template} ")
+  $stderr.print("template: #{template}\n")
   statement = template.result(binding)
-  $stderr.print("statement/2: #{statement} ")
+  $stderr.print("statement/2: #{statement}\n")
 
-  $stderr.print("@wrap_at: #{@wrap_at} ")
+  $stderr.print("@wrap_at: #{@wrap_at}\n")
   statement = wrap(statement) unless @wrap_at.nil?
-  $stderr.print("statement/3: #{statement} ")
-  $stderr.print("@page_at: #{@page_at} ")
+  $stderr.print("statement/3: #{statement}\n")
+  $stderr.print("@page_at: #{@page_at}\n")
   statement = page_print(statement) unless @page_at.nil?
-  $stderr.print("statement/4: #{statement} ")
+  $stderr.print("statement/4: #{statement}\n")
 
   # 'statement' is encoded in US-ASCII when using ruby 1.9.3(-p551)
   # 'indentation' is correctly encoded (same as default_external encoding)
-  $stderr.print("Encoding.default_external: #{Encoding.default_external} ")
+  $stderr.print("Encoding.default_external: #{Encoding.default_external}\n")
 # #<Encoding:UTF-8>
 # jenkins:
 # Encoding.default_external: US-ASCII
   statement = statement.force_encoding(Encoding.default_external)
-  $stderr.print("statement/5: #{statement} ")
+  $stderr.print("statement/5: #{statement}\n")
 
-  $stderr.print("indentation: #{indentation} ")
-  $stderr.print("@multi_indent: #{@multi_indent} ")
+indentation = ' '
+  $stderr.print("indentation: #{indentation}\n")
+  $stderr.print("@multi_indent: #{@multi_indent}\n")
   statement = statement.gsub(/\n(?!$)/,"\n#{indentation}") if @multi_indent
 
   statement

@@ -44,6 +44,8 @@ program :description, %(
 # TEST/2017-08-23: Does this work on Windows?
 ARGV.push('--no-progress') unless $stdout.tty? || ARGV.include?('--no-progress')
 #ARGV.push('--no-color') unless $stdout.tty? || ARGV.include?('--no-color')
+$stderr.print("============== __ENCODING__: #{__ENCODING__}\n")
+$stderr.print("============== ''.encode.encoding: #{''.encode("UTF-8").encoding}\n")
 ARGV.push('--ascii') unless ''.encode("UTF-8").encoding == __ENCODING__
 
 default_command :help
