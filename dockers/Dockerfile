@@ -110,11 +110,12 @@ RUN gem install \
 
 
 # ????
-RUN useradd -m -s /bin/bash --uid 1001 jenkins
-RUN /bin/ls -la /home
-RUN mkdir -p /home/jenkins
-RUN chmod 2777 /home
-RUN chmod 2777 /home/jenkins
+#RUN useradd -m -s /bin/bash --uid 1001 jenkins
+RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
+#RUN /bin/ls -la /home
+#RUN mkdir -p /home/jenkins
+#RUN chmod 2777 /home
+#RUN chmod 2777 /home/jenkins
 
 
 ##USER jenkins
