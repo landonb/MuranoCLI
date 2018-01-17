@@ -250,7 +250,10 @@ RSpec.shared_context 'CI_CMD' do
     #     +Linked Î“Ã‡Ã¿syncdowntestprd1e8b4034Î“Ã‡Ã– to Î“Ã‡Ã¿syncdowntestapp23d5135bÎ“Ã‡Ã–
     #
     # which we can solve with an encode call. (Or but using norm quotes.)
-    str.encode!('UTF-8', 'UTF-8').tr(%(‘), %(')).tr(%(’), %('))
+puts "str: #{str}"
+    str.nil? && "" || str.encode!(
+      'UTF-8', 'UTF-8').tr(%(‘), %(')).tr(%(’), %(')
+    )
   end
 
   # *** rb-commander goodies

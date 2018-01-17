@@ -1,21 +1,23 @@
 #!/bin/bash
 
-export WORKSPACE=${WORKSPACE:-/app/murano}
-mkdir -p ${WORKSPACE}
+echo "whoami: $(whoami)"
+echo "USER: ${USER}"
+#chown -R jenkins /app
 
-export MURANO_CONFIGFILE=${WORKSPACE}/test.run.muranocfg
-
+export MURANO_USERNAME="${LANDON_USERNAME}"
+export MURANO_PASSWORD="${LANDON_PASSWORD}"
 echo "\${MURANO_USERNAME}: ${MURANO_USERNAME}"
 echo "\${MURANO_PASSWORD}: ${MURANO_PASSWORD}"
-echo "\${LANDON_PASSWORD}: ${LANDON_PASSWORD}"
-echo "\${OTHER_PASSWORD}: ${OTHER_PASSWORD}"
 echo "\${WORKSPACE}: ${WORKSPACE}"
-exit 0
+echo "\$(pwd): $(pwd)"
 
-if [[ -z ${MURANO_PASSWORD} ]]; then
-    >&2 echo "Please set MURANO_PASSWORD."
-    exit 1
-fi
+echo "ll /app"
+/bin/ls -la /app
+
+export WORKSPACE=${WORKSPACE:-/app/murano}
+echo "ll ${WORKSPACE}"
+/bin/ls -la ${WORKSPACE}
+mkdir -p ${WORKSPACE}
 
 cat > "${WORKSPACE}/test.run.muranocfg" <<-EOCFB
 [user]
@@ -25,35 +27,52 @@ cat > "${WORKSPACE}/test.run.muranocfg" <<-EOCFB
 [net]
   host = bizapi.hosted.exosite.io
 EOCFB
-
-echo "Testing!"
+export MURANO_CONFIGFILE="${WORKSPACE}/test.run.muranocfg"
 
 cd /app
+/bin/ls /app
 
-echo "ruby -v..."
+echo "USER: ${USER}"
+echo "HOME: ${HOME}"
+/bin/ls /home
+mkdir -p /home/jenkins
+
+# ***
+
 ruby -v
 
-#echo "gem install bundler..."
-#gem install bundler
+#cd /app && gem install bundler && gem install rspec && bundler install && rake build
 
-#echo "bundler install..."
-#bundler install
+echo "GEM_DIR: $(ruby -rubygems -e 'puts Gem.dir')"
 
-# NOTE: `ruby -Ilib bin/murano -v` works now. Not sure why.
-
-echo "rake rebuild..."
-#rake rebuild
-#rake build
-
-echo "gem install..."
-ruby -rubygems -e 'puts Gem.dir'
 ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
-gem install -i $(ruby -rubygems -e 'puts Gem.dir') pkg/MuranoCLI-$(ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION').gem
 
-# NOTE: `murano -v` works now. As expected.
+gem install -i \
+	$(ruby -rubygems -e 'puts Gem.dir') \
+	pkg/MuranoCLI-$(ruby -e \
+		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
+	).gem
 
-#[ ${GIT_BRANCH} = "origin/feature/windows" ] && export MURANO_PASSWORD=${LANDON_PASSWORD}
+#/bin/chmod -R go+w /app
+
+# ***
+
+echo "RAKE!"
+#rake test_clean_up test
+rake test_clean_up -t
+echo "RAKE2!"
+#rake test -t
+echo "XXXXX"
+pwd
+mkdir -p /app/report
+cd /app
+RVERS=$(ruby -rubygems -e "puts RUBY_VERSION.tr('.', '_')")
+PATH=${PATH}:/usr/local/bundle/bin
+echo "PATH: ${PATH}"
+/bin/ls -la
 
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
-#rake test_clean_up test
+
+#cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation
+cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example "a number value fiftyHalf"
 
