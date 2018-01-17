@@ -1,52 +1,26 @@
 FROM ruby:2.3.6-jessie
 
+# NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
+#   inject, are not available from here.
+
 # This is already a given, but just to be clear:
 USER root
 
-# XXX WORKDIR /app
-# XXX COPY . /app
-
-# This is a little hack so the Build step Execute Shell command
-# can do as it pleases. Because Jenkins isn't quite configured
-# properly, and otherwise the Docker user cannot do much.
-# Give the unborn jenkins user sudo priveleges.
-
-# NOTE: For completeness, we could run upgrade, but that adds time to the build.
-#   RUN apt-get upgrade -y
-#   #RUN apt-get dist-upgrade -y
-
-RUN \
-  echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
-    >> /etc/apt/sources.list \
-  && echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
-    >> /etc/apt/sources.list \
-  && apt-get -qq update \
-  && apt-get install -y sudo
-
-
-#RUN apt-get install -y sudo
-
-#RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
-#RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
-## Members of the admin group may gain root privileges
-#RUN echo "%admin	ALL=(ALL) ALL" >> /etc/sudoers
-## Allow members of group sudo to execute any command
-#RUN echo "%sudo	ALL=(ALL:ALL) ALL" >> /etc/sudoers
-#RUN echo "%root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
-#
-#???
-#RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-
-
-
 # Jenkins defaults to the ASCII encoding, but we want UTF-8.
 # FIXME/MEH: (lb): Murano CLI still has encoding issues, e.g.,
+# the highline.say() command crashes on some strings, complaining:
+#
 #   invalid byte sequence in US-ASCII
+#
 # which we currently work around by running Murand CLI in ASCII, e.g.,
+#
 #   murano --no-progress --no-color --ascii ...
+#
 # which means our Jenkins/Docker test is not quite testing how
 # people usually run the app. Oh well.
+# ((lb): I had hoped the setting ENV herein would help, and while it
+# does change the encoding for the `docker exec` command that Jenkins
+# runs later, it doesn't fix the "invalid byte sequence" error.)
 #
 # NOTE: You cannot change the encoding from the Execute Shell
 #       build command. You'll see, e.g.,:
@@ -56,18 +30,9 @@ RUN \
 # ALSO: Skip LC_ALL, otherwise when Jenkins runs `docker exec ...` you'd see:
 #
 #   /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-#
-# So skipping:
-#
-#   ENV LC_ALL en_US.UTF-8
 
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
-
-# NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
-#   inject, are not available from here.
-
-
 
 # Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
 # but Docker is confused unless we create that user now and assign it the
