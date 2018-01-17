@@ -81,5 +81,5 @@ echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 
 #cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation
 #cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example "a number value fiftyHalf"
-cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example "murano link with project unlinks"
+cd /app && LANG=en_US.UTF-8 rspec --format html --out report/index-${RVERS}.html --format documentation --example "murano link with project unlinks"
 
