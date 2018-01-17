@@ -68,6 +68,7 @@ ENV LANG en_US.UTF-8
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 #RUN /bin/chmod -R go+w /app
 #RUN /bin/chmod 2777 /app
+RUN /bin/chown -R jenkins /app
 USER jenkins
 
 WORKDIR /app
