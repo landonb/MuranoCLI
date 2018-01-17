@@ -108,7 +108,11 @@ RUN gem install \
 		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
 	).gem
 
-##RUN useradd -ms /bin/bash jenkins
+
+# ????
+RUN useradd -m -s /bin/bash --uid 1001 jenkins
+
+
 ##USER jenkins
 ##RUN chown -R jenkins:jenkins /app
 ##   sudo find $dest_dir -type d -exec chmod 2775 {} +
