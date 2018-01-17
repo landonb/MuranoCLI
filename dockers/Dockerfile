@@ -1,5 +1,6 @@
 FROM ruby:2.3.6-jessie
 #FROM ruby:2.3.6-alpine3.4
+FROM ubuntu:16.04
 
 USER root
 
@@ -16,15 +17,38 @@ RUN /bin/ls -la /etc/apt/
 RUN echo "sources.list/1"
 RUN cat /etc/apt/sources.list
 RUN /bin/ls -la /etc/apt/sources.list.d/
+
+
+
 #RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
 RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
 #deb http://ftp.us.debian.org/debian/ jessie main contrib non-free
 #deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free
+
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" > /etc/apt/sources.list
+#
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" > /etc/apt/sources.list
+#
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" > /etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" > /etc/apt/sources.list
+#
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" > /etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" > /etc/apt/sources.list
+
+
+
 RUN echo "sources.list/2"
 RUN cat /etc/apt/sources.list
 
-RUN apt-get -qq update
+#RUN apt-get -qq update
+RUN apt-get update
 RUN apt-get upgrade -y
 
 # No sudo package... on jessie?
