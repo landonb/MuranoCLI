@@ -133,7 +133,7 @@ echo "PATH: ${PATH}"
 
 #WARNING: Could not write example statuses to .rspec_examples.txt (configured as `config.example_status_persistence_file_path`) due to a system error: #<Errno::EACCES: Permission denied @ rb_sysopen - .rspec_examples.txt>. Please check that the config option is set to an accessible, valid file path.
 sudo chmod 2777 /app/report
-#sudo chmod 2777 /app/coverage
+sudo chmod 2777 /app/coverage
 #XXX echo "SUDONT"
 
 
@@ -164,8 +164,8 @@ cd /app && rspec --format html --out /app/report/index-${RVERS}.html --format do
 # STILL NEED SUDO?
 #sudo chmod 2777 "${WORKSPACE}/report"
 #sudo chmod 2777 "${WORKSPACE}/coverage"
-chmod 2777 "${WORKSPACE}/report"
-chmod 2777 "${WORKSPACE}/coverage"
+#chmod 2777 "${WORKSPACE}/report"
+#chmod 2777 "${WORKSPACE}/coverage"
 
 #XXX echo "ll /app"
 #XXX /bin/ls -la /app

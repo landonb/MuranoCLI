@@ -50,7 +50,8 @@ RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
+#/bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+#ENV LC_ALL en_US.UTF-8
 
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
@@ -90,6 +91,8 @@ RUN gem install \
 #    RUN /bin/chmod -R go+w /app
 #    RUN /bin/chmod 2777 /app
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
+RUN /bin/chmod -R go+w /app
+RUN /bin/chmod 2777 /app
 
 
 #XXX RUN /bin/ls -la /usr/local/bundle
@@ -101,9 +104,10 @@ RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
 #XXX #RUN /bin/ls -la /usr/local/bundle
 #XXX #RUN /bin/ls -la /usr/local/bundle/bin
 
-RUN mkdir -p /home/jenkins
-RUN chmod 2777 /home
-RUN chmod 2777 /home/jenkins
+#?
+#RUN mkdir -p /home/jenkins
+#RUN chmod 2777 /home
+#RUN chmod 2777 /home/jenkins
 
 #XXX # install things globally, for great justice
 #XXX # https://github.com/docker-library/ruby/issues/53
