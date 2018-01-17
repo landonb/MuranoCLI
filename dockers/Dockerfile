@@ -38,14 +38,12 @@ RUN /bin/chmod 2777 /app
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
-
-RUN /bin/ls -la /usr/local/bundle
-RUN /bin/ls -la /usr/local/bundle/bin
-
 RUN chmod 2777 /usr/local/bundle
 RUN chmod 2777 /usr/local/bundle/bin
 RUN find /usr/local/bundle -type d -exec chmod 2775 {} +
 RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+r {} +
+RUN /bin/ls -la /usr/local/bundle
+RUN /bin/ls -la /usr/local/bundle/bin
 
 RUN mkdir -p /home/jenkins
 RUN chmod 2777 /home
