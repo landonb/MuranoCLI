@@ -11,6 +11,9 @@ echo "\${MURANO_PASSWORD}: ${MURANO_PASSWORD}"
 echo "\${WORKSPACE}: ${WORKSPACE}"
 echo "\$(pwd): $(pwd)"
 
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 echo "ll /app"
 /bin/ls -la /app
 
