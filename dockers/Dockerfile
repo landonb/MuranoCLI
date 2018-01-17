@@ -1,68 +1,70 @@
 FROM ruby:2.3.6-jessie
-##FROM ruby:2.3.6-alpine3.4
-#FROM ubuntu:16.04
+#XXX ##FROM ruby:2.3.6-alpine3.4
+#XXX #FROM ubuntu:16.04
 
+# This is already a given, but just to be clear:
 USER root
 
 WORKDIR /app
 COPY . /app
 
-RUN echo XXXX
-RUN cat /etc/passwd
+#XXX #RUN echo XXXX
+#XXX #RUN cat /etc/passwd
+
+#XXX #RUN /bin/ls -la /etc/apt/
+#XXX #RUN echo "sources.list/1"
+#XXX #RUN cat /etc/apt/sources.list
+#XXX #RUN /bin/ls -la /etc/apt/sources.list.d/
 
 
+# This is a little hack so the Build step Execute Shell command
+# can do as it pleases. Because Jenkins isn't quite configured
+# properly, and otherwise the Docker user cannot do much.
+# Give the unborn jenkins user sudo priveleges.
 
-
-RUN /bin/ls -la /etc/apt/
-RUN echo "sources.list/1"
-RUN cat /etc/apt/sources.list
-RUN /bin/ls -la /etc/apt/sources.list.d/
-
-
-# FIXME/TEST THESE AGAIN!:
 RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
-##
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
-##
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
-##
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
-#RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
+#XXX ##
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted" >> /etc/apt/sources.list
+#XXX ##
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial universe" >> /etc/apt/sources.list
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-updates universe" >> /etc/apt/sources.list
+#XXX ##
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security main restricted" >> /etc/apt/sources.list
+#XXX #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
+#XXX #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial-security universe" >> /etc/apt/sources.list
 
-
-
-RUN echo "sources.list/2"
-RUN cat /etc/apt/sources.list
+#XXX #RUN echo "sources.list/2"
+#XXX #RUN cat /etc/apt/sources.list
 
 RUN apt-get -qq update
-#RUN apt-get update
+# For completeness, we could run upgrade, but that adds time to the build.
 #RUN apt-get upgrade -y
 ##RUN apt-get dist-upgrade -y
 
-# No sudo package... on jessie?
 RUN apt-get install -y sudo
 
-RUN echo "sudoers/1"
-RUN cat /etc/sudoers
-RUN echo "sudoers/2"
-#
-#RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
-##
-#RUN echo "Runas_Alias ROOTY = #1001" >> /etc/sudoers
-#RUN echo "ROOTY	ALL=NOPASSWD: ALL" >> /etc/sudoers
-#RUN echo "ROOTY	ALL=(ALL:ALL) ALL" >> /etc/sudoers
-##
-## User privilege specification
+
+
+
+#XXX #RUN echo "sudoers/1"
+#XXX #RUN cat /etc/sudoers
+#XXX #RUN echo "sudoers/2"
+#XXX #
+#XXX #RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+#XXX ##
+#XXX #RUN echo "Runas_Alias ROOTY = #1001" >> /etc/sudoers
+#XXX #RUN echo "ROOTY	ALL=NOPASSWD: ALL" >> /etc/sudoers
+#XXX #RUN echo "ROOTY	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+#XXX ##
+#XXX ## User privilege specification
 #RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
 ## Members of the admin group may gain root privileges
@@ -73,83 +75,101 @@ RUN echo "sudoers/2"
 #
 #???
 RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-#
-RUN cat /etc/sudoers
+#XXX #
+#XXX RUN cat /etc/sudoers
 
-#RUN apt-get install -y language-pack-en
+# Jenkins defaults to the ASCII encoding, but we want UTF-8.
+# FIXME/MEH: (lb): Murano CLI still has encoding issues, e.g.,
+#   invalid byte sequence in US-ASCII
+# which we currently work around by running Murand CLI in ASCII, e.g.,
+#   murano --no-progress --no-color --ascii ...
+# which means our Jenkins/Docker test is not quite testing how
+# people usually run the app. Oh well.
+#
+# NOTE: You cannot change the encoding from the Execute Shell
+#       build command. You'll see, e.g.,:
+#         $ export LC_ALL=en_US.UTF-8
+#         setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-#RUN locale-gen en_US.UTF-8
 
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
 
 RUN ruby -v
 
-#RUN cd /app && gem install bundler && bundler install && rake build
+#XXX #RUN cd /app && gem install bundler && bundler install && rake build
 RUN cd /app && gem install bundler && gem install rspec && bundler install && rake build
 
-RUN rspec -v
-RUN whereis rspec
-RUN command -v rspec
+#XXX RUN rspec -v
+#XXX RUN whereis rspec
+#XXX RUN command -v rspec
 
-RUN ruby -rubygems -e 'puts Gem.dir'
+#XXX RUN ruby -rubygems -e 'puts Gem.dir'
 
-RUN ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
+#XXX RUN ruby -e 'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION'
 
-#RUN gem install -i \
-#	$(ruby -rubygems -e 'puts Gem.dir') \
-#	pkg/MuranoCLI-$(ruby -e \
-#		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
-#	).gem
+#XXX #RUN gem install -i \
+#XXX #	$(ruby -rubygems -e 'puts Gem.dir') \
+#XXX #	pkg/MuranoCLI-$(ruby -e \
+#XXX #		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
+#XXX #	).gem
 RUN gem install \
 	pkg/MuranoCLI-$(ruby -e \
 		'require "/app/lib/MrMurano/version.rb"; puts MrMurano::VERSION' \
 	).gem
+# If you're curious about GEM_HOME, et al, try:
+# 
+#   RUN bundle config
 
 
+# Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
+# but Docker is confused unless we create that user now and assign it the
+# UID that gets used. ((lb): This is hacky; Ops might fix this eventually.)
 # ????
-#RUN useradd -m -s /bin/bash --uid 1001 jenkins
-#RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
-#RUN /bin/ls -la /home
-#RUN mkdir -p /home/jenkins
-#RUN chmod 2777 /home
-#RUN chmod 2777 /home/jenkins
+#XXX #RUN useradd -m -s /bin/bash --uid 1001 jenkins
+RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
+#XXX #RUN /bin/ls -la /home
+#XXX #RUN mkdir -p /home/jenkins
+#XXX #RUN chmod 2777 /home
+#XXX #RUN chmod 2777 /home/jenkins
 
 
-##USER jenkins
-##RUN chown -R jenkins:jenkins /app
-##   sudo find $dest_dir -type d -exec chmod 2775 {} +
-##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
+#XXX ##USER jenkins
+#XXX ##RUN chown -R jenkins:jenkins /app
+#XXX ##   sudo find $dest_dir -type d -exec chmod 2775 {} +
+#XXX ##   sudo find $dest_dir -type f -exec chmod u+rw,g+rw,o+r {} +
+# FIXME: STILL NECESSARY?:
 RUN /bin/chmod -R go+w /app
 RUN /bin/chmod 2777 /app
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
 
-RUN /bin/ls -la /usr/local/bundle
-RUN /bin/ls -la /usr/local/bundle/bin
+#XXX RUN /bin/ls -la /usr/local/bundle
+#XXX RUN /bin/ls -la /usr/local/bundle/bin
 RUN chmod 2777 /usr/local/bundle
 RUN chmod 2777 /usr/local/bundle/bin
 RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
 RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
-#RUN /bin/ls -la /usr/local/bundle
-#RUN /bin/ls -la /usr/local/bundle/bin
+#XXX #RUN /bin/ls -la /usr/local/bundle
+#XXX #RUN /bin/ls -la /usr/local/bundle/bin
 
 RUN mkdir -p /home/jenkins
 RUN chmod 2777 /home
 RUN chmod 2777 /home/jenkins
 
-# install things globally, for great justice
-# https://github.com/docker-library/ruby/issues/53
-# FIXME: TEST WITHOUT THESE TWO:
-#ENV GEM_HOME /usr/local/bundle
-#ENV PATH $GEM_HOME/bin:$PATH
+#XXX # install things globally, for great justice
+#XXX # https://github.com/docker-library/ruby/issues/53
+#XXX # FIXME: TEST WITHOUT THESE TWO:
+#XXX #ENV GEM_HOME /usr/local/bundle
+#XXX #ENV PATH $GEM_HOME/bin:$PATH
 
-RUN bundle config
-#RUN bundle config --global path "$GEM_HOME" \
-#    && bundle config --global bin "$GEM_HOME/bin"
 
-#RUN mkdir -p /app/report
-#RUN chmod 2777 /app/report
+#XXX #RUN bundle config --global path "$GEM_HOME" \
+#XXX #    && bundle config --global bin "$GEM_HOME/bin"
+
+#XXX #RUN mkdir -p /app/report
+#XXX #RUN chmod 2777 /app/report
 
