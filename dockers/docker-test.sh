@@ -91,7 +91,8 @@ echo "PATH: ${PATH}"
 
 
 echo "SUDO"
-su root -c "chmod 2777 /app/report"
+#su root -c "chmod 2777 /app/report"
+sudo chmod 2777 /app/report
 echo "SUDONT"
 
 

@@ -54,10 +54,19 @@ RUN apt-get install -y sudo
 RUN echo "sudoers/1"
 RUN cat /etc/sudoers
 RUN echo "sudoers/2"
+#
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+#
+# User privilege specification
+RUN echo "root    ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN echo "1001    ALL=NOPASSWD: ALL" >> /etc/sudoers
+# Members of the admin group may gain root privileges
+RUN echo "%admin ALL=(ALL) ALL" >> /etc/sudoers
+# Allow members of group sudo to execute any command
+RUN echo "%sudo   ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN echo "%root   ALL=(ALL:ALL) ALL" >> /etc/sudoers
+#
 RUN cat /etc/sudoers
-
-
 
 #RUN apt-get install -y language-pack-en
 ENV LANGUAGE en_US.UTF-8
