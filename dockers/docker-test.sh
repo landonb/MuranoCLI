@@ -92,6 +92,7 @@ echo "PATH: ${PATH}"
 
 echo "SUDO"
 #su root -c "chmod 2777 /app/report"
+#sudo: unknown uid 1001: who are you?
 sudo chmod 2777 /app/report
 echo "SUDONT"
 
