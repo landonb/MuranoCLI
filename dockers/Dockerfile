@@ -44,9 +44,10 @@ RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free"
 RUN echo "sources.list/2"
 RUN cat /etc/apt/sources.list
 
-#RUN apt-get -qq update
-RUN apt-get update
-RUN apt-get upgrade -y
+RUN apt-get -qq update
+#RUN apt-get update
+#RUN apt-get upgrade -y
+##RUN apt-get dist-upgrade -y
 
 # No sudo package... on jessie?
 RUN apt-get install -y sudo
@@ -58,13 +59,13 @@ RUN echo "sudoers/2"
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 #
 # User privilege specification
-RUN echo "root    ALL=(ALL:ALL) ALL" >> /etc/sudoers
-RUN echo "1001    ALL=NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
 # Members of the admin group may gain root privileges
-RUN echo "%admin ALL=(ALL) ALL" >> /etc/sudoers
+RUN echo "%admin	ALL=(ALL) ALL" >> /etc/sudoers
 # Allow members of group sudo to execute any command
-RUN echo "%sudo   ALL=(ALL:ALL) ALL" >> /etc/sudoers
-RUN echo "%root   ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN echo "%sudo	ALL=(ALL:ALL) ALL" >> /etc/sudoers
+RUN echo "%root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #
 RUN cat /etc/sudoers
 
