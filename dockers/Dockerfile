@@ -64,12 +64,11 @@ RUN chmod 2777 /home/jenkins
 
 # install things globally, for great justice
 # https://github.com/docker-library/ruby/issues/53
+# FIXME: TEST WITHOUT THESE TWO:
 ENV GEM_HOME /usr/local/bundle
 ENV PATH $GEM_HOME/bin:$PATH
 
 RUN bundle config
-RUN bundle config --global path "$GEM_HOME" \
-    && bundle config --global bin "$GEM_HOME/bin"
-
-
+#RUN bundle config --global path "$GEM_HOME" \
+#    && bundle config --global bin "$GEM_HOME/bin"
 
