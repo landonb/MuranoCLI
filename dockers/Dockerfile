@@ -1,4 +1,5 @@
 FROM ruby:2.3.6-jessie
+#FROM ruby:2.3.6-alpine3.4
 
 USER root
 
@@ -11,7 +12,8 @@ RUN cat /etc/passwd
 #RUN apt-get -qq update
 #RUN apt-get upgrade -y
 
-RUN apt-get install -y sudo
+# No sudo package... on jessie?
+#RUN apt-get install -y sudo
 
 RUN echo "sudoers/1"
 RUN cat /etc/sudoers
