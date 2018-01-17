@@ -1,6 +1,6 @@
 FROM ruby:2.3.6-jessie
-#FROM ruby:2.3.6-alpine3.4
-FROM ubuntu:16.04
+##FROM ruby:2.3.6-alpine3.4
+#FROM ubuntu:16.04
 
 USER root
 
@@ -20,8 +20,8 @@ RUN /bin/ls -la /etc/apt/sources.list.d/
 
 
 # FIXME/TEST THESE AGAIN!:
-#RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
-#RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
 
 #RUN echo "deb http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
 #RUN echo "deb-src http://archive.ubuntu.com/ubuntu/ xenial main restricted" >> /etc/apt/sources.list
