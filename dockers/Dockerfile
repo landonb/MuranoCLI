@@ -11,15 +11,19 @@ USER root
 # properly, and otherwise the Docker user cannot do much.
 # Give the unborn jenkins user sudo priveleges.
 
-RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
-RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
-RUN apt-get -qq update
+RUN \
+  echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
+    >> /etc/apt/sources.list \
+  && echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
+    >> /etc/apt/sources.list \
+  && apt-get -qq update
+  && apt-get install -y sudo
 
 # For completeness, we could run upgrade, but that adds time to the build.
 #RUN apt-get upgrade -y
 ##RUN apt-get dist-upgrade -y
 
-RUN apt-get install -y sudo
+#RUN apt-get install -y sudo
 
 #RUN echo "root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #RUN echo "1001	ALL=NOPASSWD: ALL" >> /etc/sudoers
@@ -47,11 +51,17 @@ RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 #       build command. You'll see, e.g.,:
 #         $ export LC_ALL=en_US.UTF-8
 #         setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+#
+# ALSO: Skip LC_ALL, otherwise when Jenkins runs `docker exec ...` you'd see:
+# 
+#   /bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+#
+# So skipping:
+#
+#   ENV LC_ALL en_US.UTF-8
 
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
-#/bin/bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-#ENV LC_ALL en_US.UTF-8
 
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
@@ -65,10 +75,20 @@ ENV LANG en_US.UTF-8
 # we'd have to do the hideous, grotesque act of granting permissions to all:
 #    RUN /bin/chmod -R go+w /app
 #    RUN /bin/chmod 2777 /app
+
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
-#RUN /bin/chmod -R go+w /app
-#RUN /bin/chmod 2777 /app
+
+# Create the /app directory and give ownership to the new user, otherwise 
+# if we switch to the new user first, they cannot create the workdir.
+
 RUN mkdir /app && /bin/chown -R jenkins /app
+
+# Run as the new jenkins user, otherwise permissions are incorrect, and
+# we don't want to have to fudge them, e.g.,
+#   # Madness!
+#   RUN chmod 2777 /usr/local/bundle
+#   RUN chmod 2777 /usr/local/bundle/bin
+
 USER jenkins
 
 WORKDIR /app
@@ -127,8 +147,8 @@ RUN gem install \
 #RUN chmod 2777 /usr/local/bundle/bin
 #RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
 #RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
-RUN /bin/ls -la /usr/local/bundle
-RUN /bin/ls -la /usr/local/bundle/bin
+#XXX RUN /bin/ls -la /usr/local/bundle
+#XXX RUN /bin/ls -la /usr/local/bundle/bin
 
 #?
 #RUN mkdir -p /home/jenkins
