@@ -9,17 +9,33 @@ COPY . /app
 RUN echo XXXX
 RUN cat /etc/passwd
 
-#RUN apt-get -qq update
-#RUN apt-get upgrade -y
+
+
+
+RUN /bin/ls -la /etc/apt/
+RUN echo "sources.list/1"
+RUN cat /etc/apt/sources.list
+RUN /bin/ls -la /etc/apt/sources.list.d/
+#RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
+RUN echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
+#deb http://ftp.us.debian.org/debian/ jessie main contrib non-free
+#deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free
+RUN echo "sources.list/2"
+RUN cat /etc/apt/sources.list
+
+RUN apt-get -qq update
+RUN apt-get upgrade -y
 
 # No sudo package... on jessie?
-#RUN apt-get install -y sudo
+RUN apt-get install -y sudo
 
 RUN echo "sudoers/1"
 RUN cat /etc/sudoers
 RUN echo "sudoers/2"
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 RUN cat /etc/sudoers
+
 
 
 #RUN apt-get install -y language-pack-en
