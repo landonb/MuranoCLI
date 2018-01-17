@@ -30,7 +30,7 @@ RUN apt-get install -y sudo
 #RUN echo "%root	ALL=(ALL:ALL) ALL" >> /etc/sudoers
 #
 #???
-#RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 
 

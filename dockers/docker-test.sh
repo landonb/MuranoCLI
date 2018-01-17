@@ -130,13 +130,17 @@ echo "PATH: ${PATH}"
 #XXX echo "SUDO"
 #XXX #su root -c "chmod 2777 /app/report"
 #XXX #sudo: unknown uid 1001: who are you?
+
+#WARNING: Could not write example statuses to .rspec_examples.txt (configured as `config.example_status_persistence_file_path`) due to a system error: #<Errno::EACCES: Permission denied @ rb_sysopen - .rspec_examples.txt>. Please check that the config option is set to an accessible, valid file path.
 sudo chmod 2777 /app/report
 #sudo chmod 2777 /app/coverage
 #XXX echo "SUDONT"
 
 
 
+echo "#####################################################################"
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
+echo "#####################################################################"
 
 #XXX #cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation
 #XXX #cd /app && rspec --format html --out report/index-${RVERS}.html --format documentation --example "a number value fiftyHalf"
@@ -156,8 +160,12 @@ cd /app && rspec --format html --out /app/report/index-${RVERS}.html --format do
 #XXX #echo "SUDO POWER"
 # ERROR: Directory '/tmp/jenkins-ff750fb5/workspace/MuranoCLI/MrMurano Tests/report' exists but failed copying to '/var/lib/jenkins/jobs/MuranoCLI/jobs/MrMurano Tests/htmlreports/RSpec_Report'.
 # ERROR: This is especially strange since your build otherwise succeeded.
-sudo chmod 2777 "${WORKSPACE}/report"
-sudo chmod 2777 "${WORKSPACE}/coverage"
+
+# STILL NEED SUDO?
+#sudo chmod 2777 "${WORKSPACE}/report"
+#sudo chmod 2777 "${WORKSPACE}/coverage"
+chmod 2777 "${WORKSPACE}/report"
+chmod 2777 "${WORKSPACE}/coverage"
 
 #XXX echo "ll /app"
 #XXX /bin/ls -la /app
