@@ -69,7 +69,9 @@ gem install -i \
 
 echo "RAKE!"
 #rake test_clean_up test
-rake test_clean_up -t
+#rake test_clean_up -t
+ruby -Ilib bin/murano solutions expunge -y --no-progress --no-color --ascii
+
 echo "RAKE2!"
 #rake test -t
 echo "XXXXX"
