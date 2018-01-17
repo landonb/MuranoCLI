@@ -120,12 +120,15 @@ RUN gem install \
 
 #XXX RUN /bin/ls -la /usr/local/bundle
 #XXX RUN /bin/ls -la /usr/local/bundle/bin
-RUN chmod 2777 /usr/local/bundle
-RUN chmod 2777 /usr/local/bundle/bin
-RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
-RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
-#XXX #RUN /bin/ls -la /usr/local/bundle
-#XXX #RUN /bin/ls -la /usr/local/bundle/bin
+
+# MAYBE: REENABLE THIS!:
+# MUST BE ROOT:
+#RUN chmod 2777 /usr/local/bundle
+#RUN chmod 2777 /usr/local/bundle/bin
+#RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
+#RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
+RUN /bin/ls -la /usr/local/bundle
+RUN /bin/ls -la /usr/local/bundle/bin
 
 #?
 #RUN mkdir -p /home/jenkins
