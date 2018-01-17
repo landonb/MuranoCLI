@@ -137,6 +137,13 @@ sudo chmod 2777 /app/coverage
 #XXX echo "SUDONT"
 
 
+##sudo /bin/chmod -R go+w /app
+##sudo /bin/chmod 2777 /app
+#sudo /bin/chown -R go+w /app
+#sudo /bin/chown 2777 /app
+
+
+
 
 echo "#####################################################################"
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""

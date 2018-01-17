@@ -3,8 +3,8 @@ FROM ruby:2.3.6-jessie
 # This is already a given, but just to be clear:
 USER root
 
-WORKDIR /app
-COPY . /app
+# XXX WORKDIR /app
+# XXX COPY . /app
 
 # This is a little hack so the Build step Execute Shell command
 # can do as it pleases. Because Jenkins isn't quite configured
@@ -56,7 +56,28 @@ ENV LANG en_US.UTF-8
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
 #   inject, are not available from here.
 
-RUN ruby -v
+
+
+# Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
+# but Docker is confused unless we create that user now and assign it the
+# UID that gets used. ((lb): This is hacky; Ops might fix this eventually.)
+# Without adding the user to the root group and having them run as such,
+# we'd have to do the hideous, grotesque act of granting permissions to all:
+#    RUN /bin/chmod -R go+w /app
+#    RUN /bin/chmod 2777 /app
+RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
+#RUN /bin/chmod -R go+w /app
+#RUN /bin/chmod 2777 /app
+USER jenkins
+
+WORKDIR /app
+COPY . /app
+
+
+
+
+
+# XXX RUN ruby -v
 
 #XXX #RUN cd /app && gem install bundler && bundler install && rake build
 RUN cd /app && gem install bundler && gem install rspec && bundler install && rake build
@@ -83,7 +104,7 @@ RUN gem install \
 #   RUN bundle config
 
 
-# Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
+# XXX # Jenkins runs the Execute Shell script on Docker as the 'jenkins' user,
 # but Docker is confused unless we create that user now and assign it the
 # UID that gets used. ((lb): This is hacky; Ops might fix this eventually.)
 # Without adding the user to the root group and having them run as such,
@@ -91,8 +112,8 @@ RUN gem install \
 #    RUN /bin/chmod -R go+w /app
 #    RUN /bin/chmod 2777 /app
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
-RUN /bin/chmod -R go+w /app
-RUN /bin/chmod 2777 /app
+#RUN /bin/chmod -R go+w /app
+#RUN /bin/chmod 2777 /app
 
 
 #XXX RUN /bin/ls -la /usr/local/bundle
