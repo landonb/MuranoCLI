@@ -21,6 +21,7 @@
 #
 # To work around this, the Dockerfile calls `useradd ... jenkins`,
 # and the Jenkins Build Environment "User group" is set to 'root'.
+# (This
 
 # Jenkins runs the Build step Execute Shell command from the
 # ${WORKSPACE} directory, e.g.,
@@ -81,8 +82,11 @@ echo "#####################################################################"
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 echo "#####################################################################"
 
-rspec \
-  --format html \
-  --out /app/report/index-${RVERS}.html \
-  --format documentation
+#rspec \
+#  --format html \
+#  --out /app/report/index-${RVERS}.html \
+#  --format documentation
+
+rspec --format html --out /app/report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
+
 
