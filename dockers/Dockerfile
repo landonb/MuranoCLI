@@ -51,7 +51,7 @@ ENV LANG en_US.UTF-8
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 
 # Ug. Give jenkins user power to fix permissions on the mounted Volumes:
-# /app/report and /app/coverage mount as 2755.
+# /app/report and /app/coverage mount as 2755 root:root.
 # NOTE: Skipping `RUN apt-get upgrade -y` to run faster.
 RUN \
   echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
@@ -67,15 +67,10 @@ RUN echo "jenkins ALL= NOPASSWD: chmod" >> /etc/sudoers
 # Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.
 
-#RUN mkdir /app && /bin/chown -R jenkins /app
-#RUN /bin/chmod 2777 /app
-
 WORKDIR /app
 COPY . /app
 
-RUN /bin/ls -la /app
 RUN /bin/chown -R jenkins /app
-RUN /bin/ls -la /app
 
 # Run as the new jenkins user, otherwise Ruby gem permissions are
 # restrictive, and we don't want to have to fudge them, e.g.,
@@ -86,12 +81,15 @@ RUN /bin/ls -la /app
 #   RUN find /usr/local/bundle -type d -exec chmod 2777 {} +
 #   RUN find /usr/local/bundle -type f -exec chmod u+rw,g+rw,o+rw {} +
 
-# Now we're getting somewhere. Prepare the bundle and rspec Ruby commands,
-# and build Murano CLI.
+# Prepare the bundle and rspec Ruby commands, and build Murano CLI.
 
 USER jenkins
-RUN cd /app && gem install bundler && gem install rspec && bundler install && rake build
-RUN /bin/ls -la /app
+
+RUN cd /app && \
+  gem install bundler && \
+  gem install rspec && \
+  bundler install && \
+  rake build
 
 # Install Murano CLI.
 

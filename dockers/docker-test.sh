@@ -92,7 +92,7 @@ echo "#####################################################################"
 /bin/ls -la /app/report
 /bin/ls -la /app/coverage
 
-# Hint: Add --example "<...>" to limit the test suite.
+# Hint: Add `--example "<...>"` to limit the test suite.
 
 rspec \
   --format html \
