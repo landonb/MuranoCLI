@@ -54,6 +54,7 @@ RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 # if we switch to the new user first, they cannot create the workdir.
 
 RUN mkdir /app && /bin/chown -R jenkins /app
+#RUN /bin/chmod 2777 /app
 RUN /bin/ls -la /app
 
 # Run as the new jenkins user, otherwise Ruby gem permissions are
@@ -70,6 +71,11 @@ USER jenkins
 WORKDIR /app
 USER jenkins
 COPY . /app
+
+
+RUN /bin/chown -R jenkins /app
+#RUN /bin/chmod 2777 /app
+RUN /bin/ls -la /app
 
 # Now we're getting somewhere. Prepare the bundle and rspec Ruby commands,
 # and build Murano CLI.
