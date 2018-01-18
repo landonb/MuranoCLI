@@ -78,6 +78,10 @@ ruby -Ilib bin/murano solutions expunge -y --no-progress --no-color --ascii
 #   /tmp/jenkins8459777890102160498.sh: line 81: rspec: command not found
 PATH=${PATH}:/usr/local/bundle/bin
 
+#WARNING: Could not write example statuses to .rspec_examples.txt (configured as `config.example_status_persistence_file_path`) due to a system error: #<Errno::EACCES: Permission denied @ rb_sysopen - .rspec_examples.txt>. Please check that the config option is set to an accessible, valid file path.
+chmod 2777 /app/report
+chmod 2777 /app/coverage
+
 echo "#####################################################################"
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""
 echo "#####################################################################"
