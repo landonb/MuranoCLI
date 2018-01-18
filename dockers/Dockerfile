@@ -60,13 +60,9 @@ RUN \
     >> /etc/apt/sources.list \
   && apt-get -qq update \
   && apt-get install -y sudo
-
-#RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# We shouldn't need to give full sudo. But if we did:
+#   RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN echo "jenkins ALL= NOPASSWD: chmod" >> /etc/sudoers
-#root	ALL=(ALL:ALL) ALL
-#jenkins ALL= NOPASSWD: chmod
-
-
 
 # Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.

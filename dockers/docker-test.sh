@@ -78,10 +78,9 @@ ruby -Ilib bin/murano solutions expunge -y --no-progress --no-color --ascii
 #   /tmp/jenkins8459777890102160498.sh: line 81: rspec: command not found
 PATH=${PATH}:/usr/local/bundle/bin
 
-#WARNING: Could not write example statuses to .rspec_examples.txt (configured as `config.example_status_persistence_file_path`) due to a system error: #<Errno::EACCES: Permission denied @ rb_sysopen - .rspec_examples.txt>. Please check that the config option is set to an accessible, valid file path.
-# /usr/local/bundle/gems/rspec-core-3.7.1/lib/rspec/core/formatters.rb:261:in `initialize': Permission denied @ rb_sysopen - /app/report/index-.html (Errno::EACCES)
-#sudo chmod 2777 /app/report
-#sudo chmod 2777 /app/coverage
+# The host drive directories are mounted as root:root with 2755 permissions.
+# Fix this, lest the tests bomb on Errno::EACCES: Permission denied. Note
+# that Dockerfile gave the 'jenkins' user auto-sudo on the chmod command.
 chmod 2777 /app/report
 chmod 2777 /app/coverage
 
@@ -93,11 +92,12 @@ echo "#####################################################################"
 /bin/ls -la /app/report
 /bin/ls -la /app/coverage
 
-#rspec \
-#  --format html \
-#  --out /app/report/index-${RVERS}.html \
-#  --format documentation
+# Hint: Add --example "<...>" to limit the test suite.
 
-rspec --format html --out /app/report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
+rspec \
+  --format html \
+  --out /app/report/index-${RVERS}.html \
+  --format documentation
 
+#rspec --format html --out /app/report/index-${RVERS}.html --format documentation --example 'murano link with project unlinks'
 
