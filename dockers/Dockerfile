@@ -50,7 +50,8 @@ ENV LANG en_US.UTF-8
 
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 
-
+# Ug. Give jenkins user power to fix permissions on the mounted Volumes:
+# /app/report and /app/coverage mount as 2755.
 # NOTE: Skipping `RUN apt-get upgrade -y` to run faster.
 RUN \
   echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
@@ -60,7 +61,8 @@ RUN \
   && apt-get -qq update \
   && apt-get install -y sudo
 
-RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN echo "jenkins ALL= NOPASSWD: chmod" >> /etc/sudoers
 #root	ALL=(ALL:ALL) ALL
 #jenkins ALL= NOPASSWD: chmod
 
