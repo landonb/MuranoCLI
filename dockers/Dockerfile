@@ -63,6 +63,9 @@ RUN /bin/ls -la /app
 RUN /bin/chown -R jenkins /app
 RUN /bin/ls -la /app
 
+RUN mkdir /app/report && /bin/chown jenkins /app/report
+RUN mkdir /app/coverage && /bin/chown jenkins /app/coverage
+
 # Run as the new jenkins user, otherwise Ruby gem permissions are
 # restrictive, and we don't want to have to fudge them, e.g.,
 #
