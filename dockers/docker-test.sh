@@ -79,8 +79,9 @@ ruby -Ilib bin/murano solutions expunge -y --no-progress --no-color --ascii
 PATH=${PATH}:/usr/local/bundle/bin
 
 #WARNING: Could not write example statuses to .rspec_examples.txt (configured as `config.example_status_persistence_file_path`) due to a system error: #<Errno::EACCES: Permission denied @ rb_sysopen - .rspec_examples.txt>. Please check that the config option is set to an accessible, valid file path.
-chmod 2777 /app/report
-chmod 2777 /app/coverage
+# /usr/local/bundle/gems/rspec-core-3.7.1/lib/rspec/core/formatters.rb:261:in `initialize': Permission denied @ rb_sysopen - /app/report/index-.html (Errno::EACCES)
+sudo chmod 2777 /app/report
+sudo chmod 2777 /app/coverage
 
 echo "#####################################################################"
 echo "Testing \"$(murano -v)\" on \"$(ruby -v)\""

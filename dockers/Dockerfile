@@ -50,6 +50,22 @@ ENV LANG en_US.UTF-8
 
 RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 
+
+# NOTE: Skipping `RUN apt-get upgrade -y` to run faster.
+RUN \
+  echo "deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
+    >> /etc/apt/sources.list \
+  && echo "deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free" \
+    >> /etc/apt/sources.list \
+  && apt-get -qq update \
+  && apt-get install -y sudo
+
+RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+#root	ALL=(ALL:ALL) ALL
+#jenkins ALL= NOPASSWD: chmod
+
+
+
 # Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.
 
@@ -62,9 +78,6 @@ COPY . /app
 RUN /bin/ls -la /app
 RUN /bin/chown -R jenkins /app
 RUN /bin/ls -la /app
-
-RUN mkdir /app/report && /bin/chown jenkins /app/report
-RUN mkdir /app/coverage && /bin/chown jenkins /app/coverage
 
 # Run as the new jenkins user, otherwise Ruby gem permissions are
 # restrictive, and we don't want to have to fudge them, e.g.,
