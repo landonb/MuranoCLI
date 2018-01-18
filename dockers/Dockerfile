@@ -1,7 +1,7 @@
 FROM ruby:2.3.6-jessie
 
 # NOTE: Environs from Jenkins, like ${WORKSPACE} or any passwords you
-#   inject, are not available from here.
+#   inject, are not available from here (Build Environment setup).
 
 # This is already a given, but just to be clear:
 USER root
@@ -42,7 +42,8 @@ ENV LANG en_US.UTF-8
 # UID that gets used. ((lb): This is hacky; Ops might fix this eventually.)
 #
 # Without adding the user to the root group and having them run as such,
-# we'd have to do the hideous, grotesque act of granting permissions to all:
+# we'd see Errno::EACCES "Permission denied @ rb_sysopen" errors, and we'd
+# have to do the hideous, grotesque act of granting permissions to all:
 #
 #    RUN /bin/chmod -R go+w /app
 #    RUN /bin/chmod 2777 /app
