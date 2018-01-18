@@ -53,9 +53,6 @@ RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 # Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.
 
-RUN mkdir /app && /bin/chown -R jenkins /app
-#RUN /bin/chmod 2777 /app
-RUN /bin/ls -la /app
 
 # Run as the new jenkins user, otherwise Ruby gem permissions are
 # restrictive, and we don't want to have to fudge them, e.g.,
@@ -92,4 +89,9 @@ RUN gem install \
 	).gem
 
 # vim:tw=0:ts=4:sw=4:noet:ft=conf:
+
+USER root
+RUN mkdir /app && /bin/chown -R jenkins /app
+#RUN /bin/chmod 2777 /app
+RUN /bin/ls -la /app
 
