@@ -53,14 +53,13 @@ RUN useradd -m -s /bin/bash --uid 1001 -G root jenkins
 # Create the /app directory and give ownership to the new user, otherwise
 # if we switch to the new user first, they cannot create the workdir.
 
-RUN mkdir /app && /bin/chown -R jenkins /app
-
-RUN /bin/chmod 2777 /app
-RUN /bin/ls -la /app
+#RUN mkdir /app && /bin/chown -R jenkins /app
+#RUN /bin/chmod 2777 /app
 
 WORKDIR /app
 COPY . /app
 
+RUN /bin/ls -la /app
 RUN /bin/chown -R jenkins /app
 RUN /bin/ls -la /app
 
